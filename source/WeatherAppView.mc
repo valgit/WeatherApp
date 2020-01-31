@@ -60,7 +60,7 @@ class WeatherAppView extends WatchUi.View {
 
 	// Handler for the timer callback
     function onTimer() {
-    	System.println("onTimer");
+    	//System.println("onTimer");
     	// for testing
     	//mModel.generateTest();
     	
@@ -98,30 +98,35 @@ class WeatherAppView extends WatchUi.View {
 
  function makeCurrentWeatherRequest() {
  		System.println("makeCurrentWeatherRequest");
-        var appid = App.getApp().getProperty("weather_api_key");              
-       
-	    var params = {
-	    		"latitude " => 50.4747, // thumeries for sample
-	    		"longitude "=> 3.061,
-	    		"key"=> "xxx", // my key !
-	    		"units" => "si",
-                "lang" => "fr",
-                "exclude" => "[hourly,currently,daily,alerts,flags]"
-                };
+        if (System.getDeviceSettings().phoneConnected) {
 
-  		var url = "https://api.darksky.net/forecast/";
-  
-		var options = {
-				:methods => Communications.HTTP_REQUEST_METHOD_GET,
-				:headers => {"Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED},
-				:responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-		};
-   	
-		Communications.makeWebRequest(
-	    	   	url,
-	    	   	params,
-	    	   	options,
-	    	   	method(:receiveWeather));
+            var appid = App.getApp().getProperty("weather_api_key");              
+        
+            var params = {
+                    "latitude " => 50.4747, // thumeries for sample
+                    "longitude "=> 3.061,
+                    "key"=> "xxx", // my key !
+                    "units" => "si",
+                    "lang" => "fr",
+                    "exclude" => "[hourly,currently,daily,alerts,flags]"
+                    };
+
+            var url = "https://api.darksky.net/forecast/";
+    
+            var options = {
+                    :methods => Communications.HTTP_REQUEST_METHOD_GET,
+                    :headers => {"Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED},
+                    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+            };
+        
+            Communications.makeWebRequest(
+                    url,
+                    params,
+                    options,
+                    method(:receiveWeather));
+        } else {
+            System.println("no phone connection");
+        }
 
 /*
         var headers = {"Accept" => "application/json"};

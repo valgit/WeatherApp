@@ -20,4 +20,11 @@ class WeatherAppApp extends Application.AppBase {
         return [ new WeatherAppView(), new WeatherAppDelegate() ];
     }
 
+    function phoneConnected() {
+        return System.getDeviceSettings().phoneConnected;
+    }
+
+    function canDoBackground() {
+        return (Toybox.System has :ServiceDelegate);
+    }
 }
