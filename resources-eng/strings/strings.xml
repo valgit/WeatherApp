@@ -1,0 +1,8 @@
+<strings>
+    <string id="AppName">Weather App</string>
+
+    <string id="prompt">Click the menu button</string>
+
+    <string id="menu_label_1">API KEY</string>
+    <string id="menu_label_2">version</string>
+</strings>

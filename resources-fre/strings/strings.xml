@@ -1,0 +1,8 @@
+<strings>
+    <string id="AppName">Meteo App</string>
+
+    <string id="prompt">appuyer sur le buotton</string>
+
+    <string id="menu_label_1">API KEY</string>
+    <string id="menu_label_2">version</string>
+</strings>
