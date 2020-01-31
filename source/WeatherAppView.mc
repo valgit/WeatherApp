@@ -170,7 +170,12 @@ class WeatherAppView extends WatchUi.View {
    function receiveWeather(responseCode, data) {
    		System.println("receiveWeather");
         if (responseCode == 200) {
-            if (data instanceof Dictionary) {
+             if (data instanceof Lang.String && data.equals("Forbidden")) {
+                var dict = { "msg" => "WRONG KEY" };
+                System.println("wrong API key");
+                //Background.exit(dict);
+            } else {
+                if (data instanceof Dictionary) {
                 // Print the arguments duplicated and returned 
                 var keys = data.keys();
                 mMessage = "";
@@ -178,6 +183,7 @@ class WeatherAppView extends WatchUi.View {
                     //mMessage += Lang.format("$1$: $2$\n", [keys[i], args[keys[i]]]);
                     System.println(keys[i] + " => " + data[keys[i]]);
                 }
+            }   
             }
         } else {
             System.println("Current weather response code " + responseCode + " message " + data.get("message"));         
