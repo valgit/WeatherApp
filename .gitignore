@@ -84,6 +84,8 @@ fastlane/readme.md
 .project/
 bin/
 properties.mk
+*.prg*
+*.prg.debug.*
 
 # sublime
 *.sublime-workspace
