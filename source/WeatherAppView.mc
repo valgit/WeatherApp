@@ -11,33 +11,19 @@ class WeatherAppView extends WatchUi.View {
 	hidden var width = null;
 	hidden var height = null;
 	
-	hidden var lattitude = null;
-	hidden var longitude = null;
+
 	hidden var mTimer = null;
 	
+	hidden var summary = null;
+	hidden var pressure = null;
+    hidden var temperature = null;
+
     function initialize() {
     	System.println("initialize");
         View.initialize();
 
         UNITS=(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
         System.println("units in " + UNITS);
-        
-        // TODO : check ?
-        var positionInfo = Position.getInfo().position;
-        var quality = Position.getInfo().accuracy;
-        if (positionInfo == null) {
-          var activityInfo = Activity.getActivityInfo();
-          if (activityInfo != null) {
-            positionInfo = activityInfo.currentLocation;
-            quality = activityInfo.currentLocationAccuracy;
-          }
-        }
-        
-        if (positionInfo != null && quality > Position.QUALITY_NOT_AVAILABLE) {
-          lattitude = positionInfo.toDegrees()[0];
-          longitude = positionInfo.toDegrees()[1];
-          System.println("Refresh location " + lattitude + ", " + longitude + " quality : " + quality);
-        }
         
         makeCurrentWeatherRequest();
     }
@@ -84,6 +70,13 @@ class WeatherAppView extends WatchUi.View {
 		
 		dc.drawText(width/2,25,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
 
+		if (summary != null) {
+            dc.drawText(width/2,50,Gfx.FONT_SMALL,summary,Gfx.TEXT_JUSTIFY_CENTER);
+            var _tempstr = "T° : " + temperature.format("%.2f");
+            dc.drawText(width/2-60,70,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
+            var _pressstr = "P : " + pressure.format("%.2f");
+            dc.drawText(width/2+50,70,Gfx.FONT_SMALL,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
+        }
   
     }
 
@@ -100,18 +93,16 @@ class WeatherAppView extends WatchUi.View {
  		System.println("makeCurrentWeatherRequest");
         if (System.getDeviceSettings().phoneConnected) {
 
-            var appid = App.getApp().getProperty("weather_api_key");              
+            var appid = getAPIkey();              
         
+            // currently,  daily
             var params = {
-                    "latitude " => 50.4747, // thumeries for sample
-                    "longitude "=> 3.061,
-                    "key"=> "xxx", // my key !
                     "units" => "si",
                     "lang" => "fr",
-                    "exclude" => "[hourly,currently,daily,alerts,flags]"
+                    "exclude" => "[minutely,hourly,alerts,flags]"
                     };
 
-            var url = "https://api.darksky.net/forecast/";
+            var url = "https://api.darksky.net/forecast/"+appid+"/50.4747,3.061";
     
             var options = {
                     :methods => Communications.HTTP_REQUEST_METHOD_GET,
@@ -178,7 +169,15 @@ class WeatherAppView extends WatchUi.View {
                 if (data instanceof Dictionary) {
                 // Print the arguments duplicated and returned 
                 var keys = data.keys();
-                mMessage = "";
+                //mMessage = "";
+                // currently => {visibility=>16.093000, windBearing=>260, precipIntensity=>0, 
+                // apparentTemperature=>6.060000, summary=>Ciel Nuageux, precipProbability=>0, humidity=>0.870000, 
+                // uvIndex=>0, cloudCover=>0.700000, dewPoint=>7.630000, icon=>partly-cloudy-day,
+                // ozone=>343.899994, pressure=>1007.800000, temperature=>9.730000, time=>1580569580, windGust=>17.040001, windSpeed=>9.030000}
+                summary = data["currently"]["summary"];
+                pressure = data["currently"]["pressure"];
+                temperature = data["currently"]["temperature"];
+
                 for( var i = 0; i < keys.size(); i++ ) {
                     //mMessage += Lang.format("$1$: $2$\n", [keys[i], args[keys[i]]]);
                     System.println(keys[i] + " => " + data[keys[i]]);
