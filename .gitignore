@@ -86,6 +86,7 @@ bin/
 properties.mk
 *.prg*
 *.prg.debug.*
+secret.mc
 
 # sublime
 *.sublime-workspace
