@@ -17,6 +17,9 @@ class WeatherAppView extends WatchUi.View {
 	hidden var summary = null;
 	hidden var pressure = null;
     hidden var temperature = null;
+    hidden var windspeed = null;
+    hidden var windbearing = null;
+    hidden var weathericon = null;
 
     function initialize() {
     	System.println("initialize");
@@ -40,8 +43,8 @@ class WeatherAppView extends WatchUi.View {
     // loading resources into memory.
     function onShow() {
     	// Allocate a 1Hz timer               
-        mTimer = new Timer.Timer();     
-        mTimer.start(method(:onTimer), 1000, true);
+        //mTimer = new Timer.Timer();     
+        //mTimer.start(method(:onTimer), 1000, true);
     }
 
 	// Handler for the timer callback
@@ -71,11 +74,14 @@ class WeatherAppView extends WatchUi.View {
 		dc.drawText(width/2,25,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
 
 		if (summary != null) {
+            dc.drawText(width/2,150,Gfx.FONT_SMALL,weathericon,Gfx.TEXT_JUSTIFY_CENTER);
             dc.drawText(width/2,50,Gfx.FONT_SMALL,summary,Gfx.TEXT_JUSTIFY_CENTER);
             var _tempstr = "T° : " + temperature.format("%.2f");
             dc.drawText(width/2-60,70,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             var _pressstr = "P : " + pressure.format("%.2f");
             dc.drawText(width/2+50,70,Gfx.FONT_SMALL,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
+            _tempstr = "W:" + windspeed.format("%.2f") + "km/h " + windbearing;
+            dc.drawText(width/2-60,90,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
         }
   
     }
@@ -177,7 +183,9 @@ class WeatherAppView extends WatchUi.View {
                 summary = data["currently"]["summary"];
                 pressure = data["currently"]["pressure"];
                 temperature = data["currently"]["temperature"];
-
+                windspeed = data["currently"]["windSpeed"];
+                windbearing = data["currently"]["windBearing"];
+                weathericon = data["currently"]["icon"];
                 for( var i = 0; i < keys.size(); i++ ) {
                     //mMessage += Lang.format("$1$: $2$\n", [keys[i], args[keys[i]]]);
                     System.println(keys[i] + " => " + data[keys[i]]);
