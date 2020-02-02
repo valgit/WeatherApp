@@ -80,8 +80,10 @@ class WeatherAppView extends WatchUi.View {
             dc.drawText(width/2-60,70,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             var _pressstr = "P : " + pressure.format("%.2f");
             dc.drawText(width/2+50,70,Gfx.FONT_SMALL,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
-            _tempstr = "W:" + windspeed.format("%.2f") + "km/h " + windbearing;
+            _tempstr = "W:" + windspeed.format("%.2f") + "m/s " + windbearing;
             dc.drawText(width/2-60,90,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
+            // 1852/3600
+            // bf = sq3 (v^2 / 9) en kmh
         }
   
     }
