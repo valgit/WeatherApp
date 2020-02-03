@@ -1,3 +1,30 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+
+	<bitmap id="cloudy" filename="icons/cloudy.png" />
+	<bitmap id="day_clear" filename="icons/day_clear.png" />
+	<bitmap id="day_partial_cloud" filename="icons/day_partial_cloud.png" />
+	<bitmap id="day_rain" filename="icons/day_rain.png" />
+	<bitmap id="day_rain_thunder" filename="icons/day_rain_thunder.png" />
+	<bitmap id="day_sleet" filename="icons/day_sleet.png" />
+	<bitmap id="day_snow" filename="icons/day_snow.png" />
+	<bitmap id="day_snow_thunder" filename="icons/day_snow_thunder.png" />
+	<bitmap id="fog" filename="icons/fog.png" />
+	<bitmap id="mist" filename="icons/mist.png" />
+	<bitmap id="night_clear" filename="icons/night_clear.png" />
+	<bitmap id="night_partial_cloud" filename="icons/night_partial_cloud.png" />
+	<bitmap id="night_rain" filename="icons/night_rain.png" />
+	<bitmap id="night_rain_thunder" filename="icons/night_rain_thunder.png" />
+	<bitmap id="night_sleet" filename="icons/night_sleet.png" />
+	<bitmap id="night_snow" filename="icons/night_snow.png" />
+	<bitmap id="night_snow_thunder" filename="icons/night_snow_thunder.png" />
+	<bitmap id="overcast" filename="icons/overcast.png" />
+	<bitmap id="rain" filename="icons/rain.png" />
+	<bitmap id="rain_thunder" filename="icons/rain_thunder.png" />
+	<bitmap id="sleet" filename="icons/sleet.png" />
+	<bitmap id="snow" filename="icons/snow.png" />
+	<bitmap id="snow_thunder" filename="icons/snow_thunder.png" />
+	<bitmap id="thunder" filename="icons/thunder.png" />
+	<bitmap id="tornado" filename="icons/tornado.png" />
+	<bitmap id="wind" filename="icons/wind.png" />
 </drawables>

@@ -21,6 +21,28 @@ function onPosition(info) {
 }
 
 
+==============================================
+    // TODO : check ?
+        var positionInfo = Position.getInfo().position;
+        var quality = Position.getInfo().accuracy;
+        if (positionInfo == null) {
+          var activityInfo = Activity.getActivityInfo();
+          if (activityInfo != null) {
+            positionInfo = activityInfo.currentLocation;
+            quality = activityInfo.currentLocationAccuracy;
+          }
+        }
+        
+        if (positionInfo != null && quality > Position.QUALITY_NOT_AVAILABLE) {
+          lattitude = positionInfo.toDegrees()[0];
+          longitude = positionInfo.toDegrees()[1];
+          System.println("Refresh location " + lattitude + ", " + longitude + " quality : " + quality);
+        } else {
+            Position.enableLocationEvents(Position.LOCATION_CONTINUOUS, method(:onPosition));
+        }
+
+
+==============================================================================
 using Toybox.Application as App;
 using Toybox.Background;
 using Toybox.WatchUi as Ui;
@@ -112,3 +134,35 @@ class BgbgServiceDelegate extends Toybox.System.ServiceDelegate {
     
 
 }
+
+
+=====================================
+only currently :
+
+{
+  "latitude": 50.4747,
+  "longitude": 3.061,
+  "timezone": "Europe/Paris",
+  "currently": {
+    "time": 1580737327,  // ===> unix time
+    "summary": "Ciel Couvert",
+    "icon": "cloudy",
+    "precipIntensity": 0,
+    "precipProbability": 0,
+    "temperature": 10.49,
+    "apparentTemperature": 10.49,
+    "dewPoint": 6.41,
+    "humidity": 0.76,
+    "pressure": 1016.1,
+    "windSpeed": 7.14,
+    "windGust": 11.31,
+    "windBearing": 258,
+    "cloudCover": 0.96,
+    "uvIndex": 1,
+    "visibility": 16.093,
+    "ozone": 330.2
+  },
+  "offset": 1
+}
+
+==============================

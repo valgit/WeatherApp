@@ -8,18 +8,18 @@ using Toybox.Graphics as Gfx;
 
 class WeatherAppView extends WatchUi.View {
     var units = null;
-	hidden var width = null;
-	hidden var height = null;
+	private var width = null;
+	private var height = null;
 	
 
-	hidden var mTimer = null;
+	private var mTimer = null;
 	
-	hidden var summary = null;
-	hidden var pressure = null;
-    hidden var temperature = null;
-    hidden var windspeed = null;
-    hidden var windbearing = null;
-    hidden var weathericon = null;
+	private var summary = null;
+	private var pressure = null;
+    private var temperature = null;
+    private var windspeed = null;
+    private var windbearing = null;
+    private var weathericon = null;
 
     function initialize() {
     	System.println("initialize");
@@ -65,7 +65,7 @@ class WeatherAppView extends WatchUi.View {
 
         // Get and show the current time
         var clockTime = System.getClockTime();
-        var timeString = Lang.format("$1$:$2$", [clockTime.hour, clockTime.min.format("%02d")]);
+        var timeString = Lang.format("$1$:$2$:$3$", [clockTime.hour, clockTime.min.format("%02d"), clockTime.sec.format("%02d")]);
 		
 		dc.setColor(Gfx.COLOR_BLACK,Gfx.COLOR_BLACK);
 		dc.clear();
@@ -85,7 +85,7 @@ class WeatherAppView extends WatchUi.View {
             // 1852/3600
             // bf = sq3 (v^2 / 9) en kmh
             var _speed = windspeed * 0.5144;
-            var _bfs = (windspeed*windspeed/9)^3;
+            var _bfs = (windspeed*windspeed/9)^(1/3);
             System.println("speed : "+ _speed + " nds " + _bfs );
         }
   
@@ -157,11 +157,11 @@ class WeatherAppView extends WatchUi.View {
         }
 
         switch (App.getApp().getProperty("WindSpeedUnits")) {
-        case 1:
+        case 1: //kmh
           return (value * 3.6).format("%0.f");
-        case 2:
+        case 2: //mph
           return (value * 2.237).format("%0.f");
-        default:
+        default: //ms
           return value.format("%.1f");
         }
 
@@ -215,9 +215,8 @@ class WeatherAppView extends WatchUi.View {
                 System.println("wrong API key");
                 //Background.exit(dict);
             } else {
-                if (data instanceof Dictionary) {
-                // Print the arguments duplicated and returned 
-                var keys = data.keys();
+                if (data instanceof Dictionary) {                
+                
                 //mMessage = "";
                 // currently => {visibility=>16.093000, windBearing=>260, precipIntensity=>0, 
                 // apparentTemperature=>6.060000, summary=>Ciel Nuageux, precipProbability=>0, humidity=>0.870000, 
@@ -229,6 +228,9 @@ class WeatherAppView extends WatchUi.View {
                 windspeed = data["currently"]["windSpeed"];
                 windbearing = data["currently"]["windBearing"];
                 weathericon = data["currently"]["icon"];
+
+                // Print the arguments duplicated and returned 
+                var keys = data["hourly"].keys();
                 for( var i = 0; i < keys.size(); i++ ) {
                     //mMessage += Lang.format("$1$: $2$\n", [keys[i], args[keys[i]]]);
                     System.println(keys[i] + " => " + data[keys[i]]);
@@ -240,4 +242,21 @@ class WeatherAppView extends WatchUi.View {
         }
         WatchUi.requestUpdate();
     }
+
+    var iconIds = {
+    "clear-day" => :ClearDay,
+    "clear-night" => :ClearNight,
+    "rain" => :Rain,
+    "snow" => :Snow,
+    "sleet" => :Sleet,
+    "wind" => :Wind,
+    "fog" => :Fog,
+    "cloudy" => :Cloudy,
+    "partly-cloudy-day" => :PartlyCloudyDay,
+    "partly-cloudy-night" => :PartlyCloudyNight,
+  };
+
+  function getIcon(name) {
+    return new Ui.Bitmap({:rezId=>Rez.Drawables[iconIds[name]]});
+  }
 }
