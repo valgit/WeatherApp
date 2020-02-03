@@ -7,7 +7,7 @@ using Toybox.Graphics as Gfx;
  
 
 class WeatherAppView extends WatchUi.View {
-    var UNITS = null;
+    var units = null;
 	hidden var width = null;
 	hidden var height = null;
 	
@@ -25,8 +25,8 @@ class WeatherAppView extends WatchUi.View {
     	System.println("initialize");
         View.initialize();
 
-        UNITS=(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
-        System.println("units in " + UNITS);
+        units =(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
+        //System.println("units in " + units);
         
         makeCurrentWeatherRequest();
     }
@@ -80,10 +80,13 @@ class WeatherAppView extends WatchUi.View {
             dc.drawText(width/2-60,70,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             var _pressstr = "P : " + pressure.format("%.2f");
             dc.drawText(width/2+50,70,Gfx.FONT_SMALL,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
-            _tempstr = "W:" + windspeed.format("%.2f") + "m/s " + windbearing;
+            _tempstr = "W:" + windspeed.format("%.2f") + "m/s " + formatHeading(windbearing);
             dc.drawText(width/2-60,90,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             // 1852/3600
             // bf = sq3 (v^2 / 9) en kmh
+            var _speed = windspeed * 0.5144;
+            var _bfs = (windspeed*windspeed/9)^3;
+            System.println("speed : "+ _speed + " nds " + _bfs );
         }
   
     }
@@ -105,7 +108,7 @@ class WeatherAppView extends WatchUi.View {
         
             // currently,  daily
             var params = {
-                    "units" => "si",
+                    "units" => units,
                     "lang" => "fr",
                     "exclude" => "[minutely,hourly,alerts,flags]"
                     };
@@ -165,7 +168,45 @@ class WeatherAppView extends WatchUi.View {
         return "";
     }
 
-    
+   function formatHeading(heading){
+        var sixteenthPI = Math.PI / 16.0;
+        if (heading < sixteenthPI and heading >= 0){
+            return "N";
+        }else if (heading < (3 * sixteenthPI)){ 
+           return "NNE";
+        }else if (heading < (5 * sixteenthPI)){ 
+           return "NE";
+        }else if (heading < (7 * sixteenthPI)){ 
+           return "ENE";
+        }else if (heading < (9 * sixteenthPI)){ 
+           return "E";
+        }else if (heading < (11 * sixteenthPI)){ 
+           return "ESE";
+        }else if (heading < (13 * sixteenthPI)){ 
+           return "SE";
+        }else if (heading < (15 * sixteenthPI)){ 
+           return "SSE";
+        }else if (heading < (17 * sixteenthPI)){ 
+           return "S";
+        }else if ((heading < 0 and heading > (15 * sixteenthPI) * -1)){ 
+           return "SSW";
+        }else if ((heading < 0 and heading > (14 * sixteenthPI) * -1)){ 
+           return "SW";
+        }else if ((heading < 0 and heading > (13 * sixteenthPI) * -1)){ 
+           return "WSW";
+        }else if ((heading < 0 and heading > (9 * sixteenthPI) * -1)){ 
+           return "W";
+        }else if ((heading < 0 and heading > (7 * sixteenthPI) * -1)){ 
+           return "WNW";
+        }else if ((heading < 0 and heading > (5 * sixteenthPI) * -1)){ 
+           return "NW";
+        }else if ((heading < 0 and heading > (3 * sixteenthPI) * -1)){ 
+           return "NNW";
+        }else {
+            return "-";
+        }
+    }    
+
    function receiveWeather(responseCode, data) {
    		System.println("receiveWeather");
         if (responseCode == 200) {
