@@ -1,3 +1,5 @@
+/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/bin/java -Dfile.encoding=UTF-8 -Dapple.awt.UIElement=true -jar /Volumes/home/garmin/sdks/connectiq-sdk-mac-3.1.6-2019-10-23-2de4665c6/bin/monkeybrains.jar -o /Volumes/home/garmin/WeatherApp/bin/WeatherApp.prg -w -y /Volumes/home/garmin/developer_key.der -f /Volumes/home/garmin/WeatherApp/monkey.jungle 
+
 var locationString;
 
 function onStart(state) {

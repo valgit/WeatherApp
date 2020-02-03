@@ -54,7 +54,7 @@ class WeatherAppView extends WatchUi.View {
     	//mModel.generateTest();
     	
     	//mModel.updateTimer();
-        WatchUi.requestUpdate();
+        //WatchUi.requestUpdate();
     }
     
     // Update the view
@@ -88,7 +88,7 @@ class WeatherAppView extends WatchUi.View {
             // bf = sq3 (v^2 / 9) en kmh
             var _speed = windspeed * 0.5144;
             //var _bfs = pow((windspeed*windspeed/9),(1/3)); e, kmh
-            var _bfs = (kts/5)+1; //  si < 8, sinon +0
+            var _bfs = (windspeed * 0.5144 /5)+1; //  si < 8, sinon +0
             System.println("speed : "+ _speed + " nds " + _bfs );
         }
   
@@ -132,12 +132,13 @@ class WeatherAppView extends WatchUi.View {
         } else {
             System.println("no phone connection");
         }
+    }
 
-  function formatWindSpeed(value) {
+  	function formatWindSpeed(value) {
         if (value == null) {
             return "-";
         }
-
+/* bug here ?
         switch (App.getApp().getProperty("WindSpeedUnits")) {
         case 1: //kmh
           return (value * 3.6).format("%0.f");
@@ -148,12 +149,15 @@ class WeatherAppView extends WatchUi.View {
         default: //ms
           return value.format("%.1f");
         }
-
+*/
+		return (value * 0.5144).format("%0.f");
         return "-";
     }
 
    function formatHeading(heading){
         var sixteenthPI = Math.PI / 16.0;
+        heading = heading * Math.PI / 180;
+        
         if (heading < sixteenthPI and heading >= 0){
             return "N";
         }else if (heading < (3 * sixteenthPI)){ 
@@ -214,11 +218,12 @@ class WeatherAppView extends WatchUi.View {
                 weathericon = data["currently"]["icon"];
 
                 // Print the arguments duplicated and returned 
-                var keys = data["hourly"].keys();
+                var keys = data.keys();
                 for( var i = 0; i < keys.size(); i++ ) {
                     //mMessage += Lang.format("$1$: $2$\n", [keys[i], args[keys[i]]]);
                     System.println(keys[i] + " => " + data[keys[i]]);
                 }
+                
             }   
             }
         } else {
@@ -257,12 +262,13 @@ class WeatherAppView extends WatchUi.View {
   };
 
   function getIcon(name) {
-    return new Ui.Bitmap({:rezId=>Rez.Drawables[iconIds[name]]});
+    return new WatchUi.Bitmap({:rezId=>Rez.Drawables[iconIds[name]]});
   }
 
   function drawIcon(dc, x, y, symbol) {
-    var icon = getIcon(symbol);
-    icon.setLocation(x, y);
-    icon.draw(dc);
+    //var icon = getIcon(symbol);
+    //icon.setLocation(x, y);
+    //icon.draw(dc);
+    dc.drawText(x,y,Gfx.FONT_SMALL,symbol,Gfx.TEXT_JUSTIFY_CENTER);
   }
 }

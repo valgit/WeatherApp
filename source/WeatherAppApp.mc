@@ -12,6 +12,9 @@ class WeatherAppApp extends Application.AppBase {
     // onStart() is called on application start up
     function onStart(state) {
         // get last know info
+        var positionInfo = null;
+        var quality = null;
+        
         var activityInfo = Activity.getActivityInfo();
         if (activityInfo != null) {
             positionInfo = activityInfo.currentLocation;
@@ -53,7 +56,7 @@ class WeatherAppApp extends Application.AppBase {
     }
 
     function getLocation() {
-        _locationString = lattitude + "," + longitude;
+        var _locationString = lattitude + "," + longitude;
         return _locationString;
     }
 }
