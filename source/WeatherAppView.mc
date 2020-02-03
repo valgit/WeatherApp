@@ -4,7 +4,7 @@ using Toybox.Communications;
 using Toybox.System;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx; 
- 
+using Toybox.Math; 
 
 class WeatherAppView extends WatchUi.View {
     var units = null;
@@ -27,7 +27,7 @@ class WeatherAppView extends WatchUi.View {
 
         units =(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
         //System.println("units in " + units);
-        
+        System.println("lang : " + System.getDeviceSettings().systemLanguage);
         makeCurrentWeatherRequest();
     }
 
@@ -74,18 +74,21 @@ class WeatherAppView extends WatchUi.View {
 		dc.drawText(width/2,25,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
 
 		if (summary != null) {
-            dc.drawText(width/2,150,Gfx.FONT_SMALL,weathericon,Gfx.TEXT_JUSTIFY_CENTER);
+            System.println("icon: "+ weathericon);
+            drawIcon(dc,width/2,150,weathericon);
+
             dc.drawText(width/2,50,Gfx.FONT_SMALL,summary,Gfx.TEXT_JUSTIFY_CENTER);
             var _tempstr = "T° : " + temperature.format("%.2f");
             dc.drawText(width/2-60,70,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             var _pressstr = "P : " + pressure.format("%.2f");
             dc.drawText(width/2+50,70,Gfx.FONT_SMALL,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
-            _tempstr = "W:" + windspeed.format("%.2f") + "m/s " + formatHeading(windbearing);
+            _tempstr = "W:" + formatWindSpeed(windspeed) + "m/s " + formatHeading(windbearing);
             dc.drawText(width/2-60,90,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             // 1852/3600
             // bf = sq3 (v^2 / 9) en kmh
             var _speed = windspeed * 0.5144;
-            var _bfs = (windspeed*windspeed/9)^(1/3);
+            //var _bfs = pow((windspeed*windspeed/9),(1/3)); e, kmh
+            var _bfs = (kts/5)+1; //  si < 8, sinon +0
             System.println("speed : "+ _speed + " nds " + _bfs );
         }
   
@@ -130,30 +133,9 @@ class WeatherAppView extends WatchUi.View {
             System.println("no phone connection");
         }
 
-/*
-        var headers = {"Accept" => "application/json"};
-        var params = {};
-
-        var options = {
-              :headers => headers,
-                :method => Communications.HTTP_REQUEST_METHOD_GET,
-                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
-                :params => params
-            };
-
-        System.println("Current weather request " + url);
-
-        Communications.makeWebRequest(
-            url,
-            params, options,
-            method(:currentWeatherCallback)
-        );
-        */
-    }
-
   function formatWindSpeed(value) {
         if (value == null) {
-            return "";
+            return "-";
         }
 
         switch (App.getApp().getProperty("WindSpeedUnits")) {
@@ -161,11 +143,13 @@ class WeatherAppView extends WatchUi.View {
           return (value * 3.6).format("%0.f");
         case 2: //mph
           return (value * 2.237).format("%0.f");
+        case 3: // nds
+            return (value * 0.5144).format("%0.f");
         default: //ms
           return value.format("%.1f");
         }
 
-        return "";
+        return "-";
     }
 
    function formatHeading(heading){
@@ -244,19 +228,41 @@ class WeatherAppView extends WatchUi.View {
     }
 
     var iconIds = {
-    "clear-day" => :ClearDay,
-    "clear-night" => :ClearNight,
-    "rain" => :Rain,
-    "snow" => :Snow,
-    "sleet" => :Sleet,
-    "wind" => :Wind,
-    "fog" => :Fog,
-    "cloudy" => :Cloudy,
-    "partly-cloudy-day" => :PartlyCloudyDay,
-    "partly-cloudy-night" => :PartlyCloudyNight,
+    "cloudy"=> :cloudy,
+    "day-clear"=> :day_clear,
+    "day-partial-cloud"=> :day_partial_cloud,
+    "day-rain"=> :day_rain,
+    "day-rain-thunder"=> :day_rain_thunder,
+    "day-sleet"=> :day_sleet,
+    "day-snow"=> :day_snow,
+    "day-snow-thunder"=> :day_snow_thunder,
+    "fog"=> :fog,
+    "mist"=> :mist,
+    "night-clear"=> :night_clear,
+    "night-partial-cloud"=> :night_partial_cloud,
+    "night-rain"=> :night_rain,
+    "night-rain-thunder"=> :night_rain_thunder,
+    "night-sleet"=> :night_sleet,
+    "night-snow"=> :night_snow,
+    "night-snow-thunder"=> :night_snow_thunder,
+    "overcast"=> :overcast,
+    "rain"=> :rain,
+    "rain-thunder"=> :rain_thunder,
+    "sleet"=> :sleet,
+    "snow"=> :snow,
+    "snow-thunder"=> :snow_thunder,
+    "thunder"=> :thunder,
+    "tornado"=> :tornado,
+    "wind"=> :wind
   };
 
   function getIcon(name) {
     return new Ui.Bitmap({:rezId=>Rez.Drawables[iconIds[name]]});
+  }
+
+  function drawIcon(dc, x, y, symbol) {
+    var icon = getIcon(symbol);
+    icon.setLocation(x, y);
+    icon.draw(dc);
   }
 }
