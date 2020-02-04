@@ -31,12 +31,12 @@ class WeatherAppView extends WatchUi.View {
         makeCurrentWeatherRequest();
 
         // debug
-        summary = "Ciel Nuageux";
-        pressure = 1018.7;
+        summary = "Ciel Couvert";
+        pressure = 1021.3;
         temperature = 5.12;
-        windspeed = 7.49;
-        windbearing = 290;
-        weathericon = "partly-cloudy-day";
+        windspeed = 7.7;
+        windbearing = 294;
+        weathericon = "cloudy";
     }
 
     // Load your resources here
@@ -93,9 +93,7 @@ class WeatherAppView extends WatchUi.View {
             _tempstr = "W:" + formatHeading(windbearing) + " @ " + formatWindSpeed(windspeed) + "nds " ;
             dc.drawText(width/2-60,90,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             
-            // bf = sq3 (v^2 / 9) en kmh            
-            //var _bfs = pow((windspeed*windspeed/9),(1/3)); e, kmh
-            var _bfs = (windspeed * 0.5144 /5)+1; //  si < 8, sinon +0
+            var _bfs = formatBeaufort(windspeed);
             System.println("speed : "+ _bfs );
         }
   
@@ -141,8 +139,9 @@ class WeatherAppView extends WatchUi.View {
         }
     }
 
-  	function formatWindSpeed(value) {
-        if (value == null) {
+    // speed is in m/s
+  	function formatWindSpeed(speed) {
+        if (speed == null) {
             return "-";
         }
 /* bug here ?
@@ -157,8 +156,18 @@ class WeatherAppView extends WatchUi.View {
           return value.format("%.1f");
         }
 */
-		return (value * 0.5144).format("%0.f");
+        // in nd
+		return (value * 1.943844).format("%0.f");
         return "-";
+    }
+
+    // calc Beaufort from speed in m/s
+    function formatBeaufort(speed) {
+        // bf = sq3 (v^2 / 9) en kmh            
+        //var _bfs = pow((windspeed*windspeed/9),(1/3)); e, kmh
+        var _bfs = (speed * 1.943844 /5); //  si < 8, sinon +0
+        if (_bfs < 8) _bfs = _bfs +1;
+        return _bfs;
     }
 
    function formatHeading(heading){
@@ -211,6 +220,7 @@ class WeatherAppView extends WatchUi.View {
     }
 
 //  map icon type to font char
+/*
     var iconIds = {   
         "clear-day" => "A", 
         "clear-night" => "B", 
@@ -226,15 +236,30 @@ class WeatherAppView extends WatchUi.View {
         "thunderstorm" => "L", 
         "tornado" => "M"
     }
-    
+  */
+
+    var iconIds = { 
+        "clear-day" => :clear_day,
+        "clear-night" => :clear_night,
+        "cloudy" => :cloudy,
+        "fog" => :fog,
+        "partly-cloudy-day" => :partly_cloudy_day,
+        "partly-cloudy-night" => :partly_cloudy_night,
+        "rain" => :rain,
+        "sleet" => :sleet,
+        "snow" => :snow,
+        "wind" => :wind
+    };
+
+
   function getIcon(name) {
     return new WatchUi.Bitmap({:rezId=>Rez.Drawables[iconIds[name]]});
   }
 
   function drawIcon(dc, x, y, symbol) {
-    //var icon = getIcon(symbol);
-    //icon.setLocation(x, y);
-    //icon.draw(dc);
-    dc.drawText(x,y,Gfx.FONT_SMALL,iconIds[symbol],Gfx.TEXT_JUSTIFY_CENTER);
+    var icon = getIcon(symbol);
+    icon.setLocation(x, y);
+    icon.draw(dc);
+    //dc.drawText(x,y,Gfx.FONT_SMALL,iconIds[symbol],Gfx.TEXT_JUSTIFY_CENTER);    
   }
 }
