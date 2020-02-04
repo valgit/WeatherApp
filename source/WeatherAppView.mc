@@ -29,6 +29,14 @@ class WeatherAppView extends WatchUi.View {
         //System.println("units in " + units);
         System.println("lang : " + System.getDeviceSettings().systemLanguage);
         makeCurrentWeatherRequest();
+
+        // debug
+        summary = "Ciel Nuageux";
+        pressure = 1018.7;
+        temperature = 5.12;
+        windspeed = 7.49;
+        windbearing = 290;
+        weathericon = "partly-cloudy-day";
     }
 
     // Load your resources here
@@ -155,9 +163,18 @@ class WeatherAppView extends WatchUi.View {
     }
 
    function formatHeading(heading){
-        var sixteenthPI = Math.PI / 16.0;
-        heading = heading * Math.PI / 180;
-        
+        //var sixteenthPI = Math.PI / 16.0;
+        //var sixteenthPI = 11.25;
+        var index = Math.floor(heading/22.5).toNumber();
+        System.println("test en deg : "+ index);
+        var rose = ["N","NNE","NE","ENE","E",
+                "ESE","SE","SSE","S","SSO","SO",
+                "OSO","O","ONO","NO","NNO"];
+
+        return rose[index];
+
+        //heading = heading * Math.PI / 180;
+        /*
         if (heading < sixteenthPI and heading >= 0){
             return "N";
         }else if (heading < (3 * sixteenthPI)){ 
@@ -193,6 +210,7 @@ class WeatherAppView extends WatchUi.View {
         }else {
             return "-";
         }
+        */
     }    
 
    function receiveWeather(responseCode, data) {
@@ -233,32 +251,32 @@ class WeatherAppView extends WatchUi.View {
     }
 
     var iconIds = {
-    "cloudy"=> :cloudy,
-    "day-clear"=> :day_clear,
-    "day-partial-cloud"=> :day_partial_cloud,
-    "day-rain"=> :day_rain,
-    "day-rain-thunder"=> :day_rain_thunder,
-    "day-sleet"=> :day_sleet,
-    "day-snow"=> :day_snow,
-    "day-snow-thunder"=> :day_snow_thunder,
-    "fog"=> :fog,
-    "mist"=> :mist,
-    "night-clear"=> :night_clear,
-    "night-partial-cloud"=> :night_partial_cloud,
-    "night-rain"=> :night_rain,
-    "night-rain-thunder"=> :night_rain_thunder,
-    "night-sleet"=> :night_sleet,
-    "night-snow"=> :night_snow,
-    "night-snow-thunder"=> :night_snow_thunder,
-    "overcast"=> :overcast,
-    "rain"=> :rain,
-    "rain-thunder"=> :rain_thunder,
-    "sleet"=> :sleet,
-    "snow"=> :snow,
-    "snow-thunder"=> :snow_thunder,
-    "thunder"=> :thunder,
-    "tornado"=> :tornado,
-    "wind"=> :wind
+    "cloudy"=> "A",
+    "day-clear"=> "B",
+    "day-partial-cloud"=> "C",
+    "day-rain"=> "D",
+    "day-rain-thunder"=> "E",
+    "day-sleet"=> "F,
+    "day-snow"=> "G",
+    "day-snow-thunder"=> "H",
+    "fog"=> "I",
+    "mist"=> "J",
+    "night-clear"=> "K",
+    "night-partial-cloud"=> "L",
+    "night-rain"=> "M",
+    "night-rain-thunder"=> "N",
+    "night-sleet"=> "O",
+    "night-snow"=> "P",
+    "night-snow-thunder"=> "Q",
+    "overcast"=> "R",
+    "rain"=> "S",
+    "rain-thunder"=> "T",
+    "sleet"=> "U",
+    "snow"=> "V",
+    "snow-thunder"=> "W",
+    "thunder"=> "X",
+    "tornado"=> "Y",
+    "wind"=> "Z"
   };
 
   function getIcon(name) {
@@ -269,6 +287,6 @@ class WeatherAppView extends WatchUi.View {
     //var icon = getIcon(symbol);
     //icon.setLocation(x, y);
     //icon.draw(dc);
-    dc.drawText(x,y,Gfx.FONT_SMALL,symbol,Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x,y,Gfx.FONT_SMALL,iconIds[symbol],Gfx.TEXT_JUSTIFY_CENTER);
   }
 }
