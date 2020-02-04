@@ -86,18 +86,17 @@ class WeatherAppView extends WatchUi.View {
             drawIcon(dc,width/2,150,weathericon);
 
             dc.drawText(width/2,50,Gfx.FONT_SMALL,summary,Gfx.TEXT_JUSTIFY_CENTER);
-            var _tempstr = "T° : " + temperature.format("%.2f");
+            var _tempstr = "T : " + temperature.format("%.2f") + "°";
             dc.drawText(width/2-60,70,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
-            var _pressstr = "P : " + pressure.format("%.2f");
+            var _pressstr = "P : " + pressure.format("%.2f") + " hPa";
             dc.drawText(width/2+50,70,Gfx.FONT_SMALL,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
-            _tempstr = "W:" + formatWindSpeed(windspeed) + "m/s " + formatHeading(windbearing);
+            _tempstr = "W:" + formatHeading(windbearing) + " @ " + formatWindSpeed(windspeed) + "nds " ;
             dc.drawText(width/2-60,90,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
-            // 1852/3600
-            // bf = sq3 (v^2 / 9) en kmh
-            var _speed = windspeed * 0.5144;
+            
+            // bf = sq3 (v^2 / 9) en kmh            
             //var _bfs = pow((windspeed*windspeed/9),(1/3)); e, kmh
             var _bfs = (windspeed * 0.5144 /5)+1; //  si < 8, sinon +0
-            System.println("speed : "+ _speed + " nds " + _bfs );
+            System.println("speed : "+ _bfs );
         }
   
     }
@@ -172,45 +171,6 @@ class WeatherAppView extends WatchUi.View {
                 "OSO","O","ONO","NO","NNO"];
 
         return rose[index];
-
-        //heading = heading * Math.PI / 180;
-        /*
-        if (heading < sixteenthPI and heading >= 0){
-            return "N";
-        }else if (heading < (3 * sixteenthPI)){ 
-           return "NNE";
-        }else if (heading < (5 * sixteenthPI)){ 
-           return "NE";
-        }else if (heading < (7 * sixteenthPI)){ 
-           return "ENE";
-        }else if (heading < (9 * sixteenthPI)){ 
-           return "E";
-        }else if (heading < (11 * sixteenthPI)){ 
-           return "ESE";
-        }else if (heading < (13 * sixteenthPI)){ 
-           return "SE";
-        }else if (heading < (15 * sixteenthPI)){ 
-           return "SSE";
-        }else if (heading < (17 * sixteenthPI)){ 
-           return "S";
-        }else if ((heading < 0 and heading > (15 * sixteenthPI) * -1)){ 
-           return "SSW";
-        }else if ((heading < 0 and heading > (14 * sixteenthPI) * -1)){ 
-           return "SW";
-        }else if ((heading < 0 and heading > (13 * sixteenthPI) * -1)){ 
-           return "WSW";
-        }else if ((heading < 0 and heading > (9 * sixteenthPI) * -1)){ 
-           return "W";
-        }else if ((heading < 0 and heading > (7 * sixteenthPI) * -1)){ 
-           return "WNW";
-        }else if ((heading < 0 and heading > (5 * sixteenthPI) * -1)){ 
-           return "NW";
-        }else if ((heading < 0 and heading > (3 * sixteenthPI) * -1)){ 
-           return "NNW";
-        }else {
-            return "-";
-        }
-        */
     }    
 
    function receiveWeather(responseCode, data) {
@@ -250,35 +210,23 @@ class WeatherAppView extends WatchUi.View {
         WatchUi.requestUpdate();
     }
 
-    var iconIds = {
-    "cloudy"=> "A",
-    "day-clear"=> "B",
-    "day-partial-cloud"=> "C",
-    "day-rain"=> "D",
-    "day-rain-thunder"=> "E",
-    "day-sleet"=> "F,
-    "day-snow"=> "G",
-    "day-snow-thunder"=> "H",
-    "fog"=> "I",
-    "mist"=> "J",
-    "night-clear"=> "K",
-    "night-partial-cloud"=> "L",
-    "night-rain"=> "M",
-    "night-rain-thunder"=> "N",
-    "night-sleet"=> "O",
-    "night-snow"=> "P",
-    "night-snow-thunder"=> "Q",
-    "overcast"=> "R",
-    "rain"=> "S",
-    "rain-thunder"=> "T",
-    "sleet"=> "U",
-    "snow"=> "V",
-    "snow-thunder"=> "W",
-    "thunder"=> "X",
-    "tornado"=> "Y",
-    "wind"=> "Z"
-  };
-
+//  map icon type to font char
+    var iconIds = {   
+        "clear-day" => "A", 
+        "clear-night" => "B", 
+        "rain" => "C", 
+        "snow" => "D", 
+        "sleet" => "E", 
+        "wind" => "F", 
+        "fog" => "G", 
+        "cloudy" => "H", 
+        "partly-cloudy-day" => "I",  
+        "partly-cloudy-night" => "J", 
+        "hail" => "K", 
+        "thunderstorm" => "L", 
+        "tornado" => "M"
+    }
+    
   function getIcon(name) {
     return new WatchUi.Bitmap({:rezId=>Rez.Drawables[iconIds[name]]});
   }
