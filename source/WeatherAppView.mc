@@ -85,18 +85,19 @@ class WeatherAppView extends WatchUi.View {
             System.println("icon: "+ weathericon);
             drawIcon(dc,width/2,150,weathericon);
 
-            dc.drawText(width/2,50,Gfx.FONT_SMALL,summary,Gfx.TEXT_JUSTIFY_CENTER);
+            dc.drawText(width/2,50,Gfx.FONT_XTINY,summary,Gfx.TEXT_JUSTIFY_CENTER);
             var _tempstr = "T : " + temperature.format("%.2f") + "°";
-            dc.drawText(width/2-60,70,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
+            dc.drawText(width/2-60,70,Gfx.FONT_XTINY,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             var _pressstr = "P : " + pressure.format("%.2f") + " hPa";
-            dc.drawText(width/2+50,70,Gfx.FONT_SMALL,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
-            _tempstr = "W:" + formatHeading(windbearing) + " @ " + formatWindSpeed(windspeed) + "nds " ;
-            dc.drawText(width/2-60,90,Gfx.FONT_SMALL,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
+            dc.drawText(width/2+50,70,Gfx.FONT_XTINY,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
+            _tempstr = "W:" + formatHeading(windbearing) + " @ " + formatWindSpeed(windspeed) + "nd" ;
+            dc.drawText(width/2-60,70,Gfx.FONT_XTINY,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             
             var _bfs = formatBeaufort(windspeed);
             System.println("speed : "+ _bfs );
         }
-  
+    
+        gridOverlay(dc);
     }
 
     // Called when this View is removed from the screen. Save the
@@ -107,6 +108,16 @@ class WeatherAppView extends WatchUi.View {
         mTimer = null;
     }
 
+
+    function gridOverlay(dc) {
+        dc.setPenWidth(1);		
+        dc.setColor(0xFFFFFF, 0xFFFFFF);
+        var grid = 20;		
+        for (var i=1; i< grid; i+=1){ 
+            dc.drawLine (0, width*i/grid, width, height*i/grid); 					
+            dc.drawLine (width*i/grid, 0, width*i/grid, height); 
+        }    
+    }
 
  function makeCurrentWeatherRequest() {
  		System.println("makeCurrentWeatherRequest");
@@ -157,7 +168,7 @@ class WeatherAppView extends WatchUi.View {
         }
 */
         // in nd
-		return (value * 1.943844).format("%0.f");
+		return (speed * 1.943844).format("%0.f");
         return "-";
     }
 
@@ -166,8 +177,10 @@ class WeatherAppView extends WatchUi.View {
         // bf = sq3 (v^2 / 9) en kmh            
         //var _bfs = pow((windspeed*windspeed/9),(1/3)); e, kmh
         var _bfs = (speed * 1.943844 /5); //  si < 8, sinon +0
-        if (_bfs < 8) _bfs = _bfs +1;
-        return _bfs;
+        if (_bfs < 8) {
+        	_bfs = _bfs +1;
+        }
+        return Math.floor(_bfs).toNumber();
     }
 
    function formatHeading(heading){
