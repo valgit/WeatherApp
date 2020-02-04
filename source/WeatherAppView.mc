@@ -1,10 +1,12 @@
 using Toybox.WatchUi;
 using Toybox.System;
 using Toybox.Communications;
-using Toybox.System;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx; 
 using Toybox.Math; 
+
+using Toybox.Time;
+using Toybox.Time.Gregorian;
 
 class WeatherAppView extends WatchUi.View {
     var units = null;
@@ -20,6 +22,8 @@ class WeatherAppView extends WatchUi.View {
     private var windspeed = null;
     private var windbearing = null;
     private var weathericon = null;
+	private var apparentTemperature = null;
+    private var proba = null;
 
     function initialize() {
     	System.println("initialize");
@@ -27,7 +31,7 @@ class WeatherAppView extends WatchUi.View {
 
         units =(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
         //System.println("units in " + units);
-        System.println("lang : " + System.getDeviceSettings().systemLanguage);
+        //System.println("lang : " + System.getDeviceSettings().systemLanguage);
         makeCurrentWeatherRequest();
 
         // debug
@@ -83,21 +87,24 @@ class WeatherAppView extends WatchUi.View {
 
 		if (summary != null) {
             System.println("icon: "+ weathericon);
-            drawIcon(dc,width/2,150,weathericon);
+            drawIcon(dc,width/2-90,45,weathericon);// 32 pix
 
             dc.drawText(width/2,50,Gfx.FONT_XTINY,summary,Gfx.TEXT_JUSTIFY_CENTER);
+
             var _tempstr = "T : " + temperature.format("%.2f") + "°";
             dc.drawText(width/2-60,70,Gfx.FONT_XTINY,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
+
             var _pressstr = "P : " + pressure.format("%.2f") + " hPa";
             dc.drawText(width/2+50,70,Gfx.FONT_XTINY,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
-            _tempstr = "W:" + formatHeading(windbearing) + " @ " + formatWindSpeed(windspeed) + "nd" ;
-            dc.drawText(width/2-60,70,Gfx.FONT_XTINY,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
+
+            _tempstr = "W:" + formatHeading(windbearing) + " @ " + formatWindSpeed(windspeed) + "nd / " + formatBeaufort(windspeed);
+            dc.drawText(width/2-50,100,Gfx.FONT_XTINY,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
             
-            var _bfs = formatBeaufort(windspeed);
-            System.println("speed : "+ _bfs );
+            //var _bfs = formatBeaufort(windspeed);
+            //System.println("speed : "+ _bfs );
         }
     
-        gridOverlay(dc);
+        //gridOverlay(dc);
     }
 
     // Called when this View is removed from the screen. Save the
@@ -183,6 +190,7 @@ class WeatherAppView extends WatchUi.View {
         return Math.floor(_bfs).toNumber();
     }
 
+    // TODO: check value
    function formatHeading(heading){
         //var sixteenthPI = Math.PI / 16.0;
         //var sixteenthPI = 11.25;
@@ -216,7 +224,12 @@ class WeatherAppView extends WatchUi.View {
                 windspeed = data["currently"]["windSpeed"];
                 windbearing = data["currently"]["windBearing"];
                 weathericon = data["currently"]["icon"];
-
+				proba = data["currently"]["precipProbability"];
+				apparentTemperature = data["currently"]["apparentTemperature"];
+				 
+                //var _time=new Time.Moment(data["currently"]["time"]);
+                //var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
+                //System.println(_current.hour+":"+_current.min);
                 // Print the arguments duplicated and returned 
                 var keys = data.keys();
                 for( var i = 0; i < keys.size(); i++ ) {
