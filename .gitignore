@@ -91,3 +91,6 @@ secret.mc
 # sublime
 *.sublime-workspace
 
+# vscode
+.vscode
+

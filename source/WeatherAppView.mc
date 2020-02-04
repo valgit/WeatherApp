@@ -41,6 +41,7 @@ class WeatherAppView extends WatchUi.View {
         windspeed = 7.7;
         windbearing = 294;
         weathericon = "cloudy";
+        apparentTemperature = 8;
     }
 
     // Load your resources here
@@ -89,12 +90,15 @@ class WeatherAppView extends WatchUi.View {
             System.println("icon: "+ weathericon);
             drawIcon(dc,width/2-90,45,weathericon);// 32 pix
 
-            dc.drawText(width/2,50,Gfx.FONT_XTINY,summary,Gfx.TEXT_JUSTIFY_CENTER);
+            dc.drawText(width/2,50,Gfx.FONT_TINY,summary,Gfx.TEXT_JUSTIFY_CENTER);
 
-            var _tempstr = "T : " + temperature.format("%.2f") + "°";
+            var _tempstr = "T : " + temperature.format("%.0f") + "°";
             dc.drawText(width/2-60,70,Gfx.FONT_XTINY,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
 
-            var _pressstr = "P : " + pressure.format("%.2f") + " hPa";
+            _tempstr = "Feels " + apparentTemperature.format("%.0f") + "°";
+            dc.drawText(width/2-60,75,Gfx.FONT_XTINY,_tempstr,Gfx.TEXT_JUSTIFY_CENTER);
+
+            var _pressstr = "P : " + pressure.format("%.0f") + " hPa";
             dc.drawText(width/2+50,70,Gfx.FONT_XTINY,_pressstr,Gfx.TEXT_JUSTIFY_CENTER);
 
             _tempstr = "W:" + formatHeading(windbearing) + " @ " + formatWindSpeed(windspeed) + "nd / " + formatBeaufort(windspeed);
