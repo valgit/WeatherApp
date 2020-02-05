@@ -35,6 +35,7 @@ class WeatherAppView extends WatchUi.View {
         makeCurrentWeatherRequest();
 
         // debug
+        /*
         summary = "Ciel Couvert";
         pressure = 1021.3;
         temperature = 5.12;
@@ -42,6 +43,14 @@ class WeatherAppView extends WatchUi.View {
         windbearing = 294;
         weathericon = "cloudy";
         apparentTemperature = 8;
+        */
+        summary = "Ciel Dégagé";
+        pressure = 1036.3;
+        temperature = 3.22;
+        windspeed = 0.83;
+        windbearing = 331;
+        weathericon = "clear-day";
+        apparentTemperature = 3.22;
     }
 
     // Load your resources here
@@ -82,11 +91,30 @@ class WeatherAppView extends WatchUi.View {
 		
 		dc.setColor(Gfx.COLOR_BLACK,Gfx.COLOR_BLACK);
 		dc.clear();
-		dc.setColor(Gfx.COLOR_BLUE,Gfx.COLOR_TRANSPARENT);
+		dc.setColor(Gfx.COLOR_WHITE,Gfx.COLOR_RED /*COLOR_TRANSPARENT*/);
 		
-		dc.drawText(width/2,25,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
+		dc.drawText(width * 0.5, height * 0.12,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
 
 		if (summary != null) {
+            drawIcon(dc,width * 0.5 - 60,height * 0.5 - 60 ,weathericon);// 32 pix
+
+            var y = height * 0.25;
+            var _tempstr = temperature.format("%.0f") + "°";
+            dc.drawText(width * 0.5, y,
+                Gfx.FONT_NUMBER_MEDIUM,
+                _tempstr,
+                Gfx.TEXT_JUSTIFY_LEFT);
+            _tempstr = "Feels " + apparentTemperature.format("%.0f") + "°";
+            y = y + Graphics.getFontHeight(Gfx.FONT_NUMBER_MEDIUM);
+
+            dc.drawText(width * 0.5,y,
+                Gfx.FONT_XTINY,
+                _tempstr,
+                Gfx.TEXT_JUSTIFY_LEFT);
+
+            dc.drawText(width * 0.25,height * 0.75 ,Gfx.FONT_TINY,summary,Gfx.TEXT_JUSTIFY_LEFT);
+
+            /*
             System.println("icon: "+ weathericon);
             drawIcon(dc,width/2-90,45,weathericon);// 32 pix
 
@@ -106,6 +134,7 @@ class WeatherAppView extends WatchUi.View {
             
             //var _bfs = formatBeaufort(windspeed);
             //System.println("speed : "+ _bfs );
+            */
         }
     
         //gridOverlay(dc);
@@ -199,7 +228,7 @@ class WeatherAppView extends WatchUi.View {
         //var sixteenthPI = Math.PI / 16.0;
         //var sixteenthPI = 11.25;
         var index = Math.floor(heading/22.5).toNumber();
-        System.println("test en deg : "+ index);
+        //System.println("test en deg : "+ index);
         var rose = ["N","NNE","NE","ENE","E",
                 "ESE","SE","SSE","S","SSO","SO",
                 "OSO","O","ONO","NO","NNO"];
