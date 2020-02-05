@@ -91,7 +91,7 @@ class WeatherAppView extends WatchUi.View {
 		
 		dc.setColor(Gfx.COLOR_BLACK,Gfx.COLOR_BLACK);
 		dc.clear();
-		dc.setColor(Gfx.COLOR_WHITE,Gfx.COLOR_RED /*COLOR_TRANSPARENT*/);
+		dc.setColor(Gfx.COLOR_WHITE,/*Gfx.COLOR_RED*/ Gfx.COLOR_TRANSPARENT);
 		
 		dc.drawText(width * 0.5, height * 0.12,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
 
@@ -114,6 +114,15 @@ class WeatherAppView extends WatchUi.View {
 
             dc.drawText(width * 0.25,height * 0.75 ,Gfx.FONT_TINY,summary,Gfx.TEXT_JUSTIFY_LEFT);
 
+
+            //y = height * 0.5;
+            y = y + Graphics.getFontHeight(Gfx.FONT_XTINY);
+            _tempstr = "Wind:" + formatWindSpeed(windspeed) + " nd @ " + formatHeading(windbearing);
+            // + " @ " +  / " + formatBeaufort(windspeed);
+            dc.drawText(width * 0.25,y,
+                Gfx.FONT_XTINY,
+                _tempstr,
+                Gfx.TEXT_JUSTIFY_LEFT);
             /*
             System.println("icon: "+ weathericon);
             drawIcon(dc,width/2-90,45,weathericon);// 32 pix
@@ -165,11 +174,11 @@ class WeatherAppView extends WatchUi.View {
 
             var appid = getAPIkey();              
         
-            // currently,  daily
+            // currently,  daily, hourly
             var params = {
                     "units" => units,
                     "lang" => "fr",
-                    "exclude" => "[minutely,hourly,alerts,flags]"
+                    "exclude" => "[minutely,daily,alerts,flags]"
                     };
 
             var url = "https://api.darksky.net/forecast/"+appid+"/50.4747,3.061";
@@ -273,7 +282,8 @@ class WeatherAppView extends WatchUi.View {
             }   
             }
         } else {
-            System.println("Current weather response code " + responseCode + " message " + data.get("message"));         
+            System.println("Current weather response code " + responseCode);
+            //maybe null !  + " message " + data.get("message"));         
         }
         WatchUi.requestUpdate();
     }
