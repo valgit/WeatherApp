@@ -4,6 +4,7 @@ A Garmin Connect IQ weather app
 ## Description
 Features (depending on watch support):
 
+use the [Darksky API](https://darksky.net/dev) you will need an API key to use it
 
 ## Credits
 Icons:

@@ -269,16 +269,33 @@ class WeatherAppView extends WatchUi.View {
 				proba = data["currently"]["precipProbability"];
 				apparentTemperature = data["currently"]["apparentTemperature"];
 				 
-                //var _time=new Time.Moment(data["currently"]["time"]);
-                //var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
-                //System.println(_current.hour+":"+_current.min);
+                // check hourly data
+                // first slot is actual time then next 24 hours
+                System.println("next : "+data["hourly"]["summary"]);
+                var _hdata = data["hourly"]["data"]; // table ?
+                /*
+                var _time=new Time.Moment(data["hourly"]["time"]);
+                var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
+                System.println(_current.hour+":"+_current.min);
+                */
                 // Print the arguments duplicated and returned 
-                var keys = data.keys();
+                /*
+                var keys = _hdata.keys();
                 for( var i = 0; i < keys.size(); i++ ) {
+
                     //mMessage += Lang.format("$1$: $2$\n", [keys[i], args[keys[i]]]);
                     System.println(keys[i] + " => " + data[keys[i]]);
                 }
-                
+                */
+
+                var _time;
+                var _current;
+                for(var i = 0; i<25;i++) {
+                    System.println(i+" : "+_hdata[i]);
+                    _time=new Time.Moment(_hdata[i]["time"]);
+                	_current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
+                	System.println(_current.day + " - "+_current.hour+":"+_current.min);
+                }
             }   
             }
         } else {
