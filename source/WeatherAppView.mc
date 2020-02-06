@@ -153,8 +153,8 @@ class WeatherAppView extends WatchUi.View {
     // state of this View here. This includes freeing resources from
     // memory.
     function onHide() {
-    	mTimer.stop();
-        mTimer = null;
+    	//mTimer.stop();
+        //mTimer = null;
     }
 
 
