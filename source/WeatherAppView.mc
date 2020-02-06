@@ -25,7 +25,8 @@ class WeatherAppView extends WatchUi.View {
     private var weathericon = null;
 	private var apparentTemperature = null;
     private var proba = null;
-    private 
+    private var freshen = null;
+    
     function initialize() {
     	System.println("initialize");
         View.initialize();
