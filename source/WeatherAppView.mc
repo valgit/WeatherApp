@@ -36,7 +36,11 @@ class WeatherAppView extends WatchUi.View {
         //System.println("lang : " + System.getDeviceSettings().systemLanguage);
         var myapp = App.getApp();
         lastFetchTime = myapp.getProperty("lastfetchtime");
-        freshen = Time.now().value() - lastFetchTime;
+        if (lastFetchTime != null) {
+        	freshen = Time.now().value() - lastFetchTime;
+        } else {
+        	freshen = 3600;
+        }
         if (freshen > 30) {
                 System.println("(too old) Fetching weather data on startup");                
                 makeCurrentWeatherRequest();
