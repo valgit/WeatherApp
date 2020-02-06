@@ -11,11 +11,12 @@ using Toybox.Time.Gregorian;
 class WeatherAppView extends WatchUi.View {
     var units = null;
 	private var width = null;
-	private var height = null;
-	
+	private var height = null;	
 
-	private var mTimer = null;
-	
+	//private var mTimer = null;
+	//private var lastData;
+    private var lastFetchTime = null;
+
 	private var summary = null;
 	private var pressure = null;
     private var temperature = null;
@@ -24,7 +25,7 @@ class WeatherAppView extends WatchUi.View {
     private var weathericon = null;
 	private var apparentTemperature = null;
     private var proba = null;
-
+    private 
     function initialize() {
     	System.println("initialize");
         View.initialize();
@@ -32,7 +33,16 @@ class WeatherAppView extends WatchUi.View {
         units =(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
         //System.println("units in " + units);
         //System.println("lang : " + System.getDeviceSettings().systemLanguage);
-        makeCurrentWeatherRequest();
+        var myapp = App.getApp();
+        lastFetchTime = myapp.getProperty("lastfetchtime");
+        freshen = Time.now().value() - lastFetchTime;
+        if (freshen > 30) {
+                System.println("(too old) Fetching weather data on startup");                
+                makeCurrentWeatherRequest();
+        } else {
+                //httpCode = 200;
+                System.println("using current weather data");
+        }      
 
         // debug
         /*
@@ -85,15 +95,17 @@ class WeatherAppView extends WatchUi.View {
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
 
-        // Get and show the current time
-        var clockTime = System.getClockTime();
-        var timeString = Lang.format("$1$:$2$:$3$", [clockTime.hour, clockTime.min.format("%02d"), clockTime.sec.format("%02d")]);
-		
-		dc.setColor(Gfx.COLOR_BLACK,Gfx.COLOR_BLACK);
+        dc.setColor(Gfx.COLOR_BLACK,Gfx.COLOR_BLACK);
 		dc.clear();
 		dc.setColor(Gfx.COLOR_WHITE,/*Gfx.COLOR_RED*/ Gfx.COLOR_TRANSPARENT);
+
+        // Get and show the current time
+        //var clockTime = System.getClockTime();
+        //var timeString = Lang.format("$1$:$2$:$3$", [clockTime.hour, clockTime.min.format("%02d"), clockTime.sec.format("%02d")]);		
 		
-		dc.drawText(width * 0.5, height * 0.12,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
+		//dc.drawText(width * 0.5, height * 0.12,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
+        var _timeString = "last update "+freshen;
+        dc.drawText(width * 0.5, height * 0.12,Gfx.FONT_SMALL,_timeString,Gfx.TEXT_JUSTIFY_CENTER);
 
 		if (summary != null) {
             drawIcon(dc,width * 0.5 - 60,height * 0.5 - 60 ,weathericon);// 32 pix
@@ -113,7 +125,6 @@ class WeatherAppView extends WatchUi.View {
                 Gfx.TEXT_JUSTIFY_LEFT);
 
             dc.drawText(width * 0.25,height * 0.75 ,Gfx.FONT_TINY,summary,Gfx.TEXT_JUSTIFY_LEFT);
-
 
             //y = height * 0.5;
             y = y + Graphics.getFontHeight(Gfx.FONT_XTINY);
@@ -197,6 +208,8 @@ class WeatherAppView extends WatchUi.View {
         } else {
             System.println("no phone connection");
         }
+        // requesting : httpCode = -1;
+        WatchUi.requestUpdate();
     }
 
     // speed is in m/s
@@ -255,6 +268,13 @@ class WeatherAppView extends WatchUi.View {
             } else {
                 if (data instanceof Dictionary) {                
                 
+                // TODO: persist receive data
+                var myapp = App.getApp();
+                //lastData = data;
+                lastFetchTime = Time.now().value();
+                //myapp.setProperty("lastdata",lastData);
+                myapp.setProperty("lastfetchtime",lastFetchTime);
+
                 //mMessage = "";
                 // currently => {visibility=>16.093000, windBearing=>260, precipIntensity=>0, 
                 // apparentTemperature=>6.060000, summary=>Ciel Nuageux, precipProbability=>0, humidity=>0.870000, 
