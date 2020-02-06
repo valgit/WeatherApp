@@ -177,7 +177,7 @@ class WeatherAppView extends WatchUi.View {
     function gridOverlay(dc) {
         dc.setPenWidth(1);		
         dc.setColor(0xFFFFFF, 0xFFFFFF);
-        var grid = 20;		
+        var grid = 32;		
         for (var i=1; i< grid; i+=1){ 
             dc.drawLine (0, width*i/grid, width, height*i/grid); 					
             dc.drawLine (width*i/grid, 0, width*i/grid, height); 
@@ -255,7 +255,7 @@ class WeatherAppView extends WatchUi.View {
         //var sixteenthPI = Math.PI / 16.0;
         //var sixteenthPI = 11.25;
         var index = Math.floor(heading/22.5).toNumber();
-        //System.println("test en deg : "+ index);
+        System.println("test en deg : "+ index);
         var rose = ["N","NNE","NE","ENE","E",
                 "ESE","SE","SSE","S","SSO","SO",
                 "OSO","O","ONO","NO","NNO"];
@@ -316,10 +316,11 @@ class WeatherAppView extends WatchUi.View {
                 var _time;
                 var _current;
                 for(var i = 0; i<25;i++) {
-                    System.println(i+" : "+_hdata[i]);
+                    //System.println(i+" : "+_hdata[i]);
                     _time=new Time.Moment(_hdata[i]["time"]);
                 	_current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
-                	System.println(_current.day + " - "+_current.hour+":"+_current.min);
+                	System.println(i + " => "+_current.day + " - "+_current.hour+":"+_current.min);
+                	System.println("icon: " + _hdata[i]["icon"] + " T: " +_hdata[i]["temperature"]+ " Pre : "+_hdata[i]["precipProbability"]);
                 }
             }   
             }
