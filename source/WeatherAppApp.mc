@@ -26,7 +26,7 @@
 */
 using Toybox.Application;
 
-class WeatherAppApp extends Application.AppBase 
+class WeatherAppApp extends Application.AppBase {
   
     function initialize() {
         AppBase.initialize();
