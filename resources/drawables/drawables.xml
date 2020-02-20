@@ -1,5 +1,5 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+    <bitmap id="LauncherIcon" filename="meteo40x33.png" />
 
 	<bitmap id="clear_day" filename="icons/clear-day.png" />
 	<bitmap id="clear_night" filename="icons/clear-night.png" />

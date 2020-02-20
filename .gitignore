@@ -77,6 +77,7 @@ fastlane/readme.md
 /build
 /captures
 .externalNativeBuild
+.project
 
 #garmin
 /bin/
