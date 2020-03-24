@@ -37,6 +37,7 @@ using Toybox.Time.Gregorian;
 
 class WeatherWidView extends WatchUi.View {
     var units = null;
+    private var _model; // weather info
     private var latitude = null;
 	private var longitude = null;
 
@@ -63,14 +64,16 @@ class WeatherWidView extends WatchUi.View {
 
     //private var fontA = null;
 
-    function initialize() {
+    function initialize(model) {
     	System.println("initialize");
         View.initialize();
-
+    
         units =(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
         //System.println("units in " + units);
         //System.println("lang : " + System.getDeviceSettings().systemLanguage);
-           
+
+        _model = model;
+
         /* last known position */
         var positionInfo = Position.getInfo();
         var myLocation = positionInfo.position.toDegrees();
@@ -84,9 +87,7 @@ class WeatherWidView extends WatchUi.View {
             latitude = 50.4747;
             longitude = 3.061;
         }
-        // debug
-        latitude = 50.4747;
-        longitude = 3.061;
+        _model.setPosition(latitude,longitude);
                 
         var freshen = null;
         
@@ -113,36 +114,7 @@ class WeatherWidView extends WatchUi.View {
                 //makeCurrentWeatherRequest();
         }              
 
-        // debug
-        /*
-        summary = "Ciel Couvert";
-        pressure = 1021.3;
-        temperature = 5.12;
-        windspeed = 7.7;
-        windbearing = 294;
-        weathericon = "cloudy";
-        apparentTemperature = 8;
-        */
-        /*
-        summary = "Ciel Dégagé";
-        pressure = 1036.3;
-        temperature = 3.22;
-        windspeed = 0.83;
-        windbearing = 331;
-        weathericon = "clear-day";
-        apparentTemperature = 3.22;
-    */
-    /*
-     	summary = "Vent moyen commençant dans la matinée, se prolongeant jusqu’à ce soir.";
-        pressure = 1008.9;
-        temperature = 5.02;
-        windspeed = 8.85;
-        windbearing = 261;
-        weathericon = "clear-day";
-        apparentTemperature = -0.06;
-        proba = 0.06;
-		_status = 0;
-	*/
+ 
      
     }
 
@@ -522,3 +494,37 @@ function makeHourlyWeatherRequest() {
     }
 
 }
+
+
+/* samples
+       // debug
+        /*
+        summary = "Ciel Couvert";
+        pressure = 1021.3;
+        temperature = 5.12;
+        windspeed = 7.7;
+        windbearing = 294;
+        weathericon = "cloudy";
+        apparentTemperature = 8;
+        */
+        /*
+        summary = "Ciel Dégagé";
+        pressure = 1036.3;
+        temperature = 3.22;
+        windspeed = 0.83;
+        windbearing = 331;
+        weathericon = "clear-day";
+        apparentTemperature = 3.22;
+    */
+    /*
+     	summary = "Vent moyen commençant dans la matinée, se prolongeant jusqu’à ce soir.";
+        pressure = 1008.9;
+        temperature = 5.02;
+        windspeed = 8.85;
+        windbearing = 261;
+        weathericon = "clear-day";
+        apparentTemperature = -0.06;
+        proba = 0.06;
+		_status = 0;
+	*/
+

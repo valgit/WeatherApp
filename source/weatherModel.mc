@@ -60,6 +60,13 @@ class weatherModel {
 
     function initialize() {
     	System.println("weather model initialize");
+        latitude = 50.4747;
+        longitude = 3.061;
+    }
+
+    function setPosition(_latitude,_longitude) {
+        latitude = _latitude;
+        longitude = _longitude;
     }
 
     function setLocation(lon,lat) {
