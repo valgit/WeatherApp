@@ -62,6 +62,11 @@ class weatherModel {
     	System.println("weather model initialize");
     }
 
+    function setLocation(lon,lat) {
+        latitude = lat;
+        longitude = lon;
+    }
+
     function makeCurrentWeatherRequest() {
             System.println("makeCurrentWeatherRequest");
             if (System.getDeviceSettings().phoneConnected) {
