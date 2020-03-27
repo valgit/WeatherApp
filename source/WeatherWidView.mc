@@ -89,17 +89,8 @@ class WeatherWidView extends WatchUi.View {
         }
         _model.setPosition(latitude,longitude);
                 
-        var freshen = null;
+        var freshen = _model.freshness();
         
-        var lastFetchTime = getLastRefresh();
-        if (lastFetchTime != null) {
-            var _now = Time.now().value();
-        	//freshen = _now - lastFetchTime;
-            //System.println("now h : "+getHour(_now)+" / last : "+getHour(lastFetchTime));
-            freshen = getHour(_now) - getHour(lastFetchTime);            
-        } else {
-        	freshen = 24;
-        }
         // more than 1 hour ?
         _status = 0;
         if (freshen >= 1) { // TODO: check value
@@ -166,13 +157,8 @@ class WeatherWidView extends WatchUi.View {
         //var timeString = Lang.format("$1$:$2$:$3$", [clockTime.hour, clockTime.min.format("%02d"), clockTime.sec.format("%02d")]);		
 		
 		//dc.drawText(width * 0.5, height * 0.12,Gfx.FONT_SMALL,timeString,Gfx.TEXT_JUSTIFY_CENTER);
-        var freshen = 0;
-        var lastFetchTime = getLastRefresh();
-        if (lastFetchTime != null) {
-        	freshen = (Time.now().value() - lastFetchTime)/60; // minutes
-        } else {
-        	freshen = -1;
-        }
+        var freshen = _model.freshness();
+        
         var _timeString = "last update "+freshen.format("%.0f") + " m";
         dc.drawText(width * 0.5, height * 0.12,Gfx.FONT_XTINY,_timeString,Gfx.TEXT_JUSTIFY_CENTER);         		
  		
@@ -334,3 +320,5 @@ class WeatherWidView extends WatchUi.View {
 		_status = 0;
 	*/
 
+ 
+}

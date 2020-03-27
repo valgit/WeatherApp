@@ -74,6 +74,21 @@ class weatherModel {
         longitude = lon;
     }
 
+   function freshness() {
+        var freshen = null;
+        
+        var lastFetchTime = getLastRefresh();
+        if (lastFetchTime != null) {
+            var _now = Time.now().value();
+        	//freshen = _now - lastFetchTime;
+            //System.println("now h : "+getHour(_now)+" / last : "+getHour(lastFetchTime));
+            freshen = getHour(_now) - getHour(lastFetchTime);            
+        } else {
+        	freshen = 24;
+        }
+        return freshen;
+    }
+    
     function makeCurrentWeatherRequest() {
             System.println("makeCurrentWeatherRequest");
             if (System.getDeviceSettings().phoneConnected) {
