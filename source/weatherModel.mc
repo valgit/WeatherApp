@@ -46,6 +46,7 @@ class weatherModel {
 
     private var _status = null;
 
+	// publish data
 	var summary = null;
 	var pressure = null;
     var temperature = null;
@@ -56,7 +57,7 @@ class weatherModel {
     var proba = null;
     var writer = null;
 
-    private var hourly = null;
+    var hourly = null;
 
     function initialize() {
     	System.println("weather model initialize");

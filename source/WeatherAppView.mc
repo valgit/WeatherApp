@@ -28,6 +28,9 @@ using Toybox.WatchUi;
 using Toybox.System;
 using Toybox.Graphics as Gfx; 
 
+//TODO: as function
+using Toybox.Time;
+using Toybox.Time.Gregorian;
 
 /* 
  * this view display hourly weather data
@@ -74,7 +77,7 @@ class WeatherAppView extends WatchUi.View {
 
         if (_model.hourly != null) {
                 // TODO : get current hour
-                drawHourly(dc,0 , height * 0.75,_model.hourly[10]);                
+                drawHourly(dc,0 , mHeight * 0.75,_model.hourly[10]);                
         }
             
         System.println("view app onUpdate - out");
@@ -89,6 +92,7 @@ class WeatherAppView extends WatchUi.View {
 
     function drawHourly(dc,x,y,hour) {
         System.println("in drawHourly");
+        //TODO: as function 
         var _time=new Time.Moment(hour["time"]);
         var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
         System.println("["+_current.day + " - "+_current.hour+":"+_current.min+"]");
@@ -100,10 +104,12 @@ class WeatherAppView extends WatchUi.View {
 
 
 class WeatherAppViewDelegate extends WatchUi.BehaviorDelegate {
-
-    function initialize() {
+	private var _model;
+	
+    function initialize(model) {
         System.println("WeatherAppViewDelegate - view delegate init");
         BehaviorDelegate.initialize();
+        _model = model;
     }
 
     function onMenu() {

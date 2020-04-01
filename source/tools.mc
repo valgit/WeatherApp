@@ -29,6 +29,7 @@
  * toolbox of common functions
  */
 using Toybox.Application as App;
+using Toybox.WatchUi;
 using Toybox.Math; 
 
 /* handle last refresh date with SDK version */

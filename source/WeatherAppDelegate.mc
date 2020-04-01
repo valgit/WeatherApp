@@ -32,7 +32,7 @@ class WeatherAppDelegate extends WatchUi.BehaviorDelegate {
 
     function initialize(model) {
         BehaviorDelegate.initialize();
-		_model = _model;
+		_model = model;
     }
 
     function onMenu() {
