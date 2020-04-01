@@ -28,14 +28,18 @@
 using Toybox.WatchUi;
 
 class WeatherAppDelegate extends WatchUi.BehaviorDelegate {
+	private var _model = null;
 
-    function initialize() {
+    function initialize(model) {
         BehaviorDelegate.initialize();
+		_model = _model;
     }
 
     function onMenu() {
-        //WatchUi.pushView(new Rez.Menus.MainMenu(), new WeatherAppMenuDelegate(), WatchUi.SLIDE_UP);
-        WatchUi.pushView(new WeatherAppView(), new WeatherAppViewDelegate(), WatchUi.SLIDE_RIGHT);
+        //WatchUi.pushView(new Rez.Menus.MainMenu(), new WeatherAppMenuDelegate(), WatchUi.SLIDE_UP);		
+		// TODO: use self ?
+		System.println("WeatherAppDelegate - onMenu - create");
+        WatchUi.pushView(new WeatherAppView(_model), new WeatherAppViewDelegate(_model), WatchUi.SLIDE_RIGHT);
         return true;
     }
 

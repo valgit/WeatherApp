@@ -67,7 +67,7 @@ class WeatherAppApp extends Application.AppBase {
         //return [ new WeatherWidView() ];
         //return [ new WeatherAppView() ];
         _model = new weatherModel();
-        return [ new WeatherWidView(_model), new WeatherAppDelegate() ];
+        return [ new WeatherWidView(_model), new WeatherAppDelegate(_model) ];
     }
 
     function phoneConnected() {

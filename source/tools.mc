@@ -135,3 +135,30 @@ function getHour(date) {
     var hour = Math.floor(date/3600);
     return hour;
 }
+
+function drawIcon(dc, x, y, symbol) {
+    var icon = getIcon(symbol);
+    icon.setLocation(x, y);
+    icon.draw(dc);
+    //var dim = icon.getDimensions();
+    //System.println("WxH : "+dim[0] + ","+dim[1]);
+    //dc.drawText(x,y,Gfx.FONT_SMALL,iconIds[symbol],Gfx.TEXT_JUSTIFY_CENTER);    
+}
+
+// map icon name to png
+var iconIds = { 
+        "clear-day" => :clear_day,
+        "clear-night" => :clear_night,
+        "cloudy" => :cloudy,
+        "fog" => :fog,
+        "partly-cloudy-day" => :partly_cloudy_day,
+        "partly-cloudy-night" => :partly_cloudy_night,
+        "rain" => :rain,
+        "sleet" => :sleet,
+        "snow" => :snow,
+        "wind" => :wind
+    };
+
+function getIcon(name) {
+    return new WatchUi.Bitmap({:rezId=>Rez.Drawables[iconIds[name]]});
+}

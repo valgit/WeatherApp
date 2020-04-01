@@ -36,9 +36,12 @@ class WeatherAppView extends WatchUi.View {
     private var mWidth;
     private var mHeight;
 
-    function initialize() {
+    private var _model;
+
+    function initialize(model) {
         System.println("view app initialize");
         View.initialize();
+        _model = model;
     }
 
     // Load your resources here
@@ -69,6 +72,11 @@ class WeatherAppView extends WatchUi.View {
         var _todo = "this is hourly view";
         dc.drawText(mWidth * 0.1, mHeight * 0.5,Gfx.FONT_XTINY,_todo,Gfx.TEXT_JUSTIFY_CENTER);
 
+        if (_model.hourly != null) {
+                // TODO : get current hour
+                drawHourly(dc,0 , height * 0.75,_model.hourly[10]);                
+        }
+            
         System.println("view app onUpdate - out");
     }
 
@@ -79,13 +87,22 @@ class WeatherAppView extends WatchUi.View {
         System.println("view app onHide");
     }
 
+    function drawHourly(dc,x,y,hour) {
+        System.println("in drawHourly");
+        var _time=new Time.Moment(hour["time"]);
+        var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
+        System.println("["+_current.day + " - "+_current.hour+":"+_current.min+"]");
+        System.println("icon: " + hour["icon"] + " T: " +hour["temperature"]+ " Pre : "+(hour["precipProbability"] * 100).format("%.0f"));
+        System.println("Wind: " + hour["windSpeed"] + "m/s P: " +hour["pressure"].format("%.0f")+ " hPa");
+        System.println("summary: " + hour["summary"]);
+ }
 }
 
 
 class WeatherAppViewDelegate extends WatchUi.BehaviorDelegate {
 
     function initialize() {
-        System.println("view delegate init");
+        System.println("WeatherAppViewDelegate - view delegate init");
         BehaviorDelegate.initialize();
     }
 

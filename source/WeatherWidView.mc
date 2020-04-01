@@ -35,9 +35,8 @@ using Toybox.Math;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
 
-class WeatherWidView extends WatchUi.View {
-    var units = null;
-    private var _model; // weather info
+class WeatherWidView extends WatchUi.View {   
+    private var _model; // weather info    
     private var latitude = null;
 	private var longitude = null;
 
@@ -46,20 +45,13 @@ class WeatherWidView extends WatchUi.View {
 
 	//private var mTimer = null;
     private var _status = null;
-
-    private var writer = null;
-
-    private var hourly = null;
+    private var writer = null;    
 
     //private var fontA = null;
 
     function initialize(model) {
     	System.println("initialize");
-        View.initialize();
-    
-        units =(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
-        //System.println("units in " + units);
-        //System.println("lang : " + System.getDeviceSettings().systemLanguage);
+        View.initialize();        
 
         _model = model;
 
@@ -80,6 +72,7 @@ class WeatherWidView extends WatchUi.View {
                 
         var freshen = _model.freshness();
         
+        /*
         // more than 1 hour ?
         _status = 0;
         if (freshen >= 1) { // TODO: check value
@@ -91,7 +84,10 @@ class WeatherWidView extends WatchUi.View {
                 //parseCurrentWeather(data);
                 _model.parseHourlyWeather(data);                
         }              
-
+        */
+        System.println("(too old) Fetching weather data on startup " + freshen);
+        // TODO : use current ?
+        _model.makeHourlyWeatherRequest();           
  
      
     }
@@ -197,11 +193,12 @@ class WeatherWidView extends WatchUi.View {
             //var _bfs = formatBeaufort(windspeed);
             //System.println("speed : "+ _bfs );
             */
+            /*
             if (hourly != null) {
                 // TODO : get current hour
                 drawHourly(dc,0 , height * 0.75,hourly[10]);                
             }
-            
+            */
 
         }
     
@@ -238,7 +235,7 @@ class WeatherWidView extends WatchUi.View {
         //System.println("wh : "+ width * 0.25 + " px , hh : " + height*0.25 + " px");
     }
 
-
+/*
  function drawHourly(dc,x,y,hour) {
         System.println("in drawHourly");
         var _time=new Time.Moment(hour["time"]);
@@ -248,34 +245,7 @@ class WeatherWidView extends WatchUi.View {
         System.println("Wind: " + hour["windSpeed"] + "m/s P: " +hour["pressure"].format("%.0f")+ " hPa");
         System.println("summary: " + hour["summary"]);
  }
-
-    // map icon name to png
-    var iconIds = { 
-        "clear-day" => :clear_day,
-        "clear-night" => :clear_night,
-        "cloudy" => :cloudy,
-        "fog" => :fog,
-        "partly-cloudy-day" => :partly_cloudy_day,
-        "partly-cloudy-night" => :partly_cloudy_night,
-        "rain" => :rain,
-        "sleet" => :sleet,
-        "snow" => :snow,
-        "wind" => :wind
-    };
-
-  function getIcon(name) {
-    return new WatchUi.Bitmap({:rezId=>Rez.Drawables[iconIds[name]]});
-  }
-
-  function drawIcon(dc, x, y, symbol) {
-    var icon = getIcon(symbol);
-    icon.setLocation(x, y);
-    icon.draw(dc);
-    //var dim = icon.getDimensions();
-    //System.println("WxH : "+dim[0] + ","+dim[1]);
-    //dc.drawText(x,y,Gfx.FONT_SMALL,iconIds[symbol],Gfx.TEXT_JUSTIFY_CENTER);    
-  }
- 
+*/
 
 /* samples
        // debug
