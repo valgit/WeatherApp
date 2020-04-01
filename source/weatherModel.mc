@@ -203,7 +203,7 @@ class weatherModel {
         WatchUi.requestUpdate();
     }
 
-  	// parse JSON weather data
+    // parse JSON weather data
     function parseHourlyWeather(data) {
         // currently => {visibility=>16.093000, windBearing=>260, precipIntensity=>0, 
         // apparentTemperature=>6.060000, summary=>Ciel Nuageux, precipProbability=>0, humidity=>0.870000, 
@@ -251,8 +251,7 @@ class weatherModel {
         }
     
     }
-
-
+    
     function receiveHourlyWeather(responseCode, data) {
    		System.println("receiveHourlyWeather");
         if (responseCode == 200) {

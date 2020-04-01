@@ -47,17 +47,6 @@ class WeatherWidView extends WatchUi.View {
 	//private var mTimer = null;
     private var _status = null;
 
-	//private var lastData;
-    //private var lastFetchTime = null;
-
-	private var summary = null;
-	private var pressure = null;
-    private var temperature = null;
-    private var windspeed = null;
-    private var windbearing = null;
-    private var weathericon = null;
-	private var apparentTemperature = null;
-    private var proba = null;
     private var writer = null;
 
     private var hourly = null;
@@ -165,16 +154,16 @@ class WeatherWidView extends WatchUi.View {
         if (_status != 0) {
             dc.drawText(width * 0.5, height * 0.5,Gfx.FONT_XTINY,"waiting data...",Gfx.TEXT_JUSTIFY_CENTER);
         }
-		if (summary != null) {
-            drawIcon(dc,width * 0.5 - 64,height * 0.5 - 64 ,weathericon);// 64 pix
+		if (_model.summary != null) {            
+            drawIcon(dc,width * 0.5 - 64,height * 0.5 - 64 ,_model.weathericon);// 64 pix
 
             var y = height * 0.25;
-            var _tempstr = temperature.format("%.0f") + "°";
+            var _tempstr = _model.temperature.format("%.0f") + "°";
             dc.drawText(width * 0.5, y,
                 Gfx.FONT_NUMBER_MEDIUM,
                 _tempstr,
                 Gfx.TEXT_JUSTIFY_LEFT);
-            _tempstr = "Feels " + apparentTemperature.format("%.0f") + "°";
+            _tempstr = "Feels " + _model.apparentTemperature.format("%.0f") + "°";
             y = y + Graphics.getFontHeight(Gfx.FONT_NUMBER_MEDIUM);
 
             dc.drawText(width * 0.5,y,
@@ -184,11 +173,11 @@ class WeatherWidView extends WatchUi.View {
 
             //dc.drawText(width * 0.25,height * 0.75 ,Gfx.FONT_TINY,summary,Gfx.TEXT_JUSTIFY_LEFT);
             var posY = height * 0.75;
-            posY = writer.writeLines(dc, summary, Gfx.FONT_XTINY, posY);
+            posY = writer.writeLines(dc, _model.summary, Gfx.FONT_XTINY, posY);
 
             //y = height * 0.5;
             y = y + Graphics.getFontHeight(Gfx.FONT_XTINY);
-            _tempstr = "Wind:" + formatWindSpeed(windspeed) + " nd @ " + formatHeading(windbearing) + "("+windbearing.format("%.0f")+")";
+            _tempstr = "Wind:" + formatWindSpeed(_model.windspeed) + " nd @ " + formatHeading(_model.windbearing) + "("+_model.windbearing.format("%.0f")+")";
             // + " @ " +  / " + formatBeaufort(windspeed);
             dc.drawText(width * 0.25,y,
                 Gfx.FONT_XTINY,
@@ -196,8 +185,8 @@ class WeatherWidView extends WatchUi.View {
                 Gfx.TEXT_JUSTIFY_LEFT);
                 
             y = y + Graphics.getFontHeight(Gfx.FONT_XTINY);
-            var _proba = proba * 100;
-            _tempstr = pressure.format("%.0f") + " hPa Hum: " + _proba.format("%.0f")+ " %";
+            var _proba = _model.proba * 100;
+            _tempstr = _model.pressure.format("%.0f") + " hPa Hum: " + _proba.format("%.0f")+ " %";
             dc.drawText(width * 0.25,y,
                 Gfx.FONT_XTINY,
                 _tempstr,
