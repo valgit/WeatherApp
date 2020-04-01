@@ -46,15 +46,15 @@ class weatherModel {
 
     private var _status = null;
 
-	private var summary = null;
-	private var pressure = null;
-    private var temperature = null;
-    private var windspeed = null;
-    private var windbearing = null;
-    private var weathericon = null;
-	private var apparentTemperature = null;
-    private var proba = null;
-    private var writer = null;
+	var summary = null;
+	var pressure = null;
+    var temperature = null;
+    var windspeed = null;
+    var windbearing = null;
+    var weathericon = null;
+	var apparentTemperature = null;
+    var proba = null;
+    var writer = null;
 
     private var hourly = null;
 
