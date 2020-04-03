@@ -77,7 +77,14 @@ class WeatherAppView extends WatchUi.View {
 
         if (_model.hourly != null) {
                 // TODO : get current hour
-                drawHourly(dc,0 , mHeight * 0.75,_model.hourly[10]);                
+                //var now = System.getTimer();
+                //var _now = System.getClockTime(); // ClockTime object
+                //var _hour = _now.hour;
+                //System.println("now is : " + _hour);
+                //var now = Time.now();
+                for(var h = 0; h < 8; h++) {
+                    drawHourly(dc,mWidth * 0.1 , h * 64 ,_model.hourly[h]);
+                }
         }
             
         System.println("view app onUpdate - out");
@@ -91,7 +98,7 @@ class WeatherAppView extends WatchUi.View {
     }
 
     function drawHourly(dc,x,y,hour) {
-        System.println("in drawHourly");
+        System.println("in drawHourly " + x + "," + y);
         //TODO: as function 
         var _time=new Time.Moment(hour["time"]);
         var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
@@ -99,6 +106,15 @@ class WeatherAppView extends WatchUi.View {
         System.println("icon: " + hour["icon"] + " T: " +hour["temperature"]+ " Pre : "+(hour["precipProbability"] * 100).format("%.0f"));
         System.println("Wind: " + hour["windSpeed"] + "m/s P: " +hour["pressure"].format("%.0f")+ " hPa");
         System.println("summary: " + hour["summary"]);
+        drawIcon(dc,x - 64,y - 64 ,hour["icon"]);// 64 pix
+        var _tempstr = hour["temperature"].format("%.0f") + "°";
+        dc.drawText(x, y,
+                Gfx.FONT_NUMBER_MEDIUM,
+                _tempstr,
+                Gfx.TEXT_JUSTIFY_LEFT);
+        //_tempstr = "Feels " + _model.apparentTemperature.format("%.0f") + "°";
+        y = y + Graphics.getFontHeight(Gfx.FONT_NUMBER_MEDIUM);
+        return y;
  }
 }
 

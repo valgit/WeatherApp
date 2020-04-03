@@ -44,7 +44,7 @@ class weatherModel {
     private var latitude = null;
 	private var longitude = null;
 
-    private var _status = null;
+    var status = null;
 
 	// publish data
 	var summary = null;
@@ -64,6 +64,8 @@ class weatherModel {
         latitude = 50.4747;
         longitude = 3.061;
         units =(System.getDeviceSettings().temperatureUnits==System.UNIT_STATUTE) ? "us" : "si";
+        
+        System.println("units : " + units);
     }
 
     function setPosition(_latitude,_longitude) {
@@ -105,7 +107,7 @@ class weatherModel {
                         };
 
                 var url = "https://api.darksky.net/forecast/"+appid+"/"+latitude+","+longitude;
-        
+        		System.println("makeCurrentWeatherRequest " + longitude + "," + latitude);
                 var options = {
                         :methods => Communications.HTTP_REQUEST_METHOD_GET,
                         :headers => {"Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED},
@@ -117,7 +119,7 @@ class weatherModel {
                         params,
                         options,
                         method(:receiveCurrentWeather));
-                _status = 1;
+                status = 1;
             } else {
                 System.println("no phone connection");
             }        
@@ -125,7 +127,7 @@ class weatherModel {
     }   
 
     function makeHourlyWeatherRequest() {
- 		System.println("makeCurrentWeatherRequest");
+ 		System.println("makeHourlyWeatherRequest");
         if (System.getDeviceSettings().phoneConnected) {
 
             var appid = getAPIkey();              
@@ -138,7 +140,7 @@ class weatherModel {
                     };
 
             var url = "https://api.darksky.net/forecast/"+appid+"/"+latitude+","+longitude;
-    
+    		System.println("makeHourlyWeatherRequest " + longitude + "," + latitude);
             var options = {
                     :methods => Communications.HTTP_REQUEST_METHOD_GET,
                     :headers => {"Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED},
@@ -150,7 +152,7 @@ class weatherModel {
                     params,
                     options,
                     method(:receiveHourlyWeather));
-            _status = 1;
+            status = 1;
         } else {
             System.println("no phone connection");
         }        
@@ -190,7 +192,7 @@ class weatherModel {
                     var lastFetchTime = Time.now().value();
                     //setLastData(lastData);
                     setLastRefresh(lastFetchTime);
-                    _status = 0;
+                    status = 0;
                     parseCurrentWeather(data);
                 }   
             }
@@ -267,7 +269,7 @@ class weatherModel {
                     var lastFetchTime = Time.now().value();
                     //setLastData(lastData);
                     setLastRefresh(lastFetchTime);
-                    _status = 0;
+                    status = 0;
                     parseHourlyWeather(data);
                 }   
             }

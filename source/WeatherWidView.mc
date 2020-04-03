@@ -43,8 +43,7 @@ class WeatherWidView extends WatchUi.View {
 	private var width = null;
 	private var height = null;	
 
-	//private var mTimer = null;
-    private var _status = null;
+	//private var mTimer = null;   
     private var writer = null;    
 
     //private var fontA = null;
@@ -147,7 +146,7 @@ class WeatherWidView extends WatchUi.View {
         var _timeString = "last update "+freshen.format("%.0f") + " m";
         dc.drawText(width * 0.5, height * 0.12,Gfx.FONT_XTINY,_timeString,Gfx.TEXT_JUSTIFY_CENTER);         		
  		
-        if (_status != 0) {
+        if (_model.status != 0) {
             dc.drawText(width * 0.5, height * 0.5,Gfx.FONT_XTINY,"waiting data...",Gfx.TEXT_JUSTIFY_CENTER);
         }
 		if (_model.summary != null) {            
