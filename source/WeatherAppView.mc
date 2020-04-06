@@ -107,20 +107,35 @@ class WeatherAppView extends WatchUi.View {
         dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
         dc.fillRectangle(x,y,20,60);
 
+        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
         //TODO: as function 
         var _time=new Time.Moment(hour["time"]);
         var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
         System.println("["+_current.day + " - "+_current.hour+":"+_current.min+"]");
+
+        dc.drawText(x+ 25 , y,
+                Gfx.FONT_NUMBER_MILD,
+                _current.hour,
+                Gfx.TEXT_JUSTIFY_LEFT);
+        y = y + Graphics.getFontHeight(Gfx.FONT_NUMBER_MILD);
+
         System.println("icon: " + hour["icon"] + " T: " +hour["temperature"]+ " Pre : "+(hour["precipProbability"] * 100).format("%.0f"));
         System.println("Wind: " + hour["windSpeed"] + "m/s P: " +hour["pressure"].format("%.0f")+ " hPa");
+
+        dc.drawText(x+ 25 , y,
+                Gfx.FONT_XTINY,
+                hour["summary"],
+                Gfx.TEXT_JUSTIFY_LEFT);
+        y = y + Graphics.getFontHeight(Gfx.FONT_XTINY);
         System.println("summary: " + hour["summary"]);
         //drawIcon(dc,x,y - 64 ,hour["icon"]);// 64 pix
-
+        /*
         var _tempstr = hour["temperature"].format("%.0f") + "°";
         dc.drawText(x, y,
                 Gfx.FONT_NUMBER_MEDIUM,
                 _tempstr,
                 Gfx.TEXT_JUSTIFY_LEFT);
+        */
         //_tempstr = "Feels " + _model.apparentTemperature.format("%.0f") + "°";
         y = y + Graphics.getFontHeight(Gfx.FONT_NUMBER_MEDIUM);
         return y;
