@@ -103,6 +103,10 @@ class WeatherAppView extends WatchUi.View {
         System.println("in drawHourly " + x + "," + y);
         dc.drawRectangle(x,y,200,60);
         
+        var _precip = (hour["precipProbability"] * 100);
+        dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
+        dc.fillRectangle(x,y,20,60);
+
         //TODO: as function 
         var _time=new Time.Moment(hour["time"]);
         var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
@@ -110,7 +114,8 @@ class WeatherAppView extends WatchUi.View {
         System.println("icon: " + hour["icon"] + " T: " +hour["temperature"]+ " Pre : "+(hour["precipProbability"] * 100).format("%.0f"));
         System.println("Wind: " + hour["windSpeed"] + "m/s P: " +hour["pressure"].format("%.0f")+ " hPa");
         System.println("summary: " + hour["summary"]);
-        drawIcon(dc,x,y - 64 ,hour["icon"]);// 64 pix
+        //drawIcon(dc,x,y - 64 ,hour["icon"]);// 64 pix
+
         var _tempstr = hour["temperature"].format("%.0f") + "°";
         dc.drawText(x, y,
                 Gfx.FONT_NUMBER_MEDIUM,
