@@ -35,11 +35,17 @@ class WeatherAppDelegate extends WatchUi.BehaviorDelegate {
 		_model = model;
     }
 
+	function onTap(clickEvent) {
+		System.println("WeatherAppDelegate - onTap");
+		return false;
+	}
+
     function onMenu() {
         //WatchUi.pushView(new Rez.Menus.MainMenu(), new WeatherAppMenuDelegate(), WatchUi.SLIDE_UP);		
 		// TODO: use self ?
 		System.println("WeatherAppDelegate - onMenu - create");
-        WatchUi.pushView(new WeatherAppView(_model), new WeatherAppViewDelegate(_model), WatchUi.SLIDE_RIGHT);
+		var mView = new WeatherAppView(_model);
+        WatchUi.pushView(mView, new WeatherAppViewDelegate(_model, mView), WatchUi.SLIDE_RIGHT);
         return true;
     }
 

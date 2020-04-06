@@ -40,11 +40,13 @@ class WeatherAppView extends WatchUi.View {
     private var mHeight;
 
     private var _model;
+    private var _scrollpos = null;
 
     function initialize(model) {
         System.println("view app initialize");
         View.initialize();
         _model = model;
+        _scrollpos = 0;
     }
 
     // Load your resources here
@@ -83,7 +85,7 @@ class WeatherAppView extends WatchUi.View {
                 //System.println("now is : " + _hour);
                 //var now = Time.now();
                 for(var h = 0; h < 8; h++) {
-                    drawHourly(dc,mWidth * 0.1 , h * 64 ,_model.hourly[h]);
+                    drawHourly(dc,mWidth * 0.1 , _scrollpos + h * 64 ,_model.hourly[h]);
                 }
         }
             
@@ -99,6 +101,8 @@ class WeatherAppView extends WatchUi.View {
 
     function drawHourly(dc,x,y,hour) {
         System.println("in drawHourly " + x + "," + y);
+        dc.drawRectangle(x,y,200,60);
+        
         //TODO: as function 
         var _time=new Time.Moment(hour["time"]);
         var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
@@ -106,7 +110,7 @@ class WeatherAppView extends WatchUi.View {
         System.println("icon: " + hour["icon"] + " T: " +hour["temperature"]+ " Pre : "+(hour["precipProbability"] * 100).format("%.0f"));
         System.println("Wind: " + hour["windSpeed"] + "m/s P: " +hour["pressure"].format("%.0f")+ " hPa");
         System.println("summary: " + hour["summary"]);
-        drawIcon(dc,x - 64,y - 64 ,hour["icon"]);// 64 pix
+        drawIcon(dc,x,y - 64 ,hour["icon"]);// 64 pix
         var _tempstr = hour["temperature"].format("%.0f") + "°";
         dc.drawText(x, y,
                 Gfx.FONT_NUMBER_MEDIUM,
@@ -116,16 +120,28 @@ class WeatherAppView extends WatchUi.View {
         y = y + Graphics.getFontHeight(Gfx.FONT_NUMBER_MEDIUM);
         return y;
  }
+
+    function scrollup() {
+        _scrollpos += 180;
+        WatchUi.requestUpdate();
+    }
+
+       function scrolldown() {
+        _scrollpos -= 180;
+        WatchUi.requestUpdate();
+    }
 }
 
 
 class WeatherAppViewDelegate extends WatchUi.BehaviorDelegate {
 	private var _model;
+    private var _view;
 	
-    function initialize(model) {
+    function initialize(model,view) {
         System.println("WeatherAppViewDelegate - view delegate init");
         BehaviorDelegate.initialize();
         _model = model;
+        _view = view;
     }
 
     function onMenu() {
@@ -133,4 +149,18 @@ class WeatherAppViewDelegate extends WatchUi.BehaviorDelegate {
         return true;
     }
 
+    // scroll down
+	function onNextPage() {
+        System.println("WeatherAppViewDelegate scroll down");
+        _view.scrolldown();
+        
+        return true;       
+    }
+
+    function onPreviousPage() {
+        System.println("WeatherAppViewDelegate scroll up");
+        _view.scrollup();
+        
+        return true;
+    }
 }
