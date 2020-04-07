@@ -74,9 +74,10 @@ class WeatherAppView extends WatchUi.View {
 		dc.clear();
 		dc.setColor(Gfx.COLOR_WHITE,/*Gfx.COLOR_RED*/ Gfx.COLOR_TRANSPARENT);
 
+/*
         var _todo = "this is hourly view";
         dc.drawText(mWidth * 0.1, mHeight * 0.5,Gfx.FONT_XTINY,_todo,Gfx.TEXT_JUSTIFY_CENTER);
-
+*/
         if (_model.hourly != null) {
                 // TODO : get current hour
                 //var now = System.getTimer();
@@ -100,33 +101,44 @@ class WeatherAppView extends WatchUi.View {
     }
 
     function drawHourly(dc,x,y,hour) {
-        System.println("in drawHourly " + x + "," + y);
-        dc.drawRectangle(x,y,200,60);
+        //System.println("in drawHourly " + x + "," + y);        
         
-        var _precip = (hour["precipProbability"] * 100);
-        dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
+        //var _precip = (hour["precipProbability"] * 100);
+        // shade of blue, white = no precip
+        var colorShade = (1 - hour["precipProbability"]) * 0x0000ff; 
+        System.println("in drawHourly : " + (1 - hour["precipProbability"]) );
+        dc.setColor(colorShade, Gfx.COLOR_TRANSPARENT);
         dc.fillRectangle(x,y,20,60);
 
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+        //for debug
+        dc.drawRectangle(x,y,200,60);
         //TODO: as function 
         var _time=new Time.Moment(hour["time"]);
         var _current = Gregorian.info(_time, Time.FORMAT_MEDIUM);
-        System.println("["+_current.day + " - "+_current.hour+":"+_current.min+"]");
+        //System.println("["+_current.day + " - "+_current.hour+":"+_current.min+"]");
 
         dc.drawText(x+ 25 , y,
                 Gfx.FONT_NUMBER_MILD,
                 _current.hour,
                 Gfx.TEXT_JUSTIFY_LEFT);
+        
+        var _tempstr = hour["temperature"].format("%.0f")+"°";
+        dc.drawText(x+ 100 , y,
+                Gfx.FONT_SYSTEM_XTINY,
+                _tempstr,
+                Gfx.TEXT_JUSTIFY_LEFT);
+        
         y = y + Graphics.getFontHeight(Gfx.FONT_NUMBER_MILD);
 
-        System.println("icon: " + hour["icon"] + " T: " +hour["temperature"]+ " Pre : "+(hour["precipProbability"] * 100).format("%.0f"));
+        System.println("icon: " + hour["icon"] + " Pre : "+(hour["precipProbability"] * 100).format("%.0f"));
         System.println("Wind: " + hour["windSpeed"] + "m/s P: " +hour["pressure"].format("%.0f")+ " hPa");
 
         dc.drawText(x+ 25 , y,
-                Gfx.FONT_XTINY,
+                Gfx.FONT_SYSTEM_XTINY,
                 hour["summary"],
                 Gfx.TEXT_JUSTIFY_LEFT);
-        y = y + Graphics.getFontHeight(Gfx.FONT_XTINY);
+        y = y + Graphics.getFontHeight(Gfx.FONT_SYSTEM_XTINY);
         System.println("summary: " + hour["summary"]);
         //drawIcon(dc,x,y - 64 ,hour["icon"]);// 64 pix
         /*

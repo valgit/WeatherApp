@@ -35,6 +35,7 @@ class WeatherAppDelegate extends WatchUi.BehaviorDelegate {
 		_model = model;
     }
 
+	// should map to on_select ?
 	function onTap(clickEvent) {
 		System.println("WeatherAppDelegate - onTap");
 		return false;
